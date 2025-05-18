@@ -40,7 +40,7 @@ Site profissional acadêmico com design moderno e responsivo, utilizando cores e
 
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/seu-usuario/site-professora-rosiery.git
+   git clone https://github.com/luizianesp/Sistema-Rosiery-Maia.git
    ```
 
 2. Navegue até o diretório do projeto:
