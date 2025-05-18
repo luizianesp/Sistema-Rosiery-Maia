@@ -68,8 +68,11 @@ O site utiliza uma paleta de cores em tons pastéis que pode ser facilmente pers
 ```
 
 ## 📄 Equipe
+
 Luiziane Paulino (Gerente de projeto)
+
 Boris Oliveira (Back-end)
+
 Luis Henrique (Front-end)
 
 
