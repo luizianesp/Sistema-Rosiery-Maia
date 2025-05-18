@@ -16,41 +16,41 @@
             --text-color: #457b9d;
             --dark-text: #1d3557;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--secondary-color);
             color: var(--text-color);
         }
-        
+
         .navbar {
             background-color: var(--primary-color);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        
+
         .navbar-brand, .nav-link {
             color: var(--dark-text) !important;
             font-weight: 600;
         }
-        
+
         .nav-link:hover {
             color: var(--text-color) !important;
         }
-        
+
         .page-header {
             background-color: var(--primary-color);
             padding: 3rem 0;
             border-radius: 0 0 50px 50px;
             margin-bottom: 3rem;
         }
-        
+
         .section-title {
             color: var(--dark-text);
             position: relative;
             padding-bottom: 15px;
             margin-bottom: 30px;
         }
-        
+
         .section-title::after {
             content: '';
             position: absolute;
@@ -60,11 +60,11 @@
             height: 3px;
             background-color: var(--accent-color);
         }
-        
+
         .section {
             padding: 4rem 0;
         }
-        
+
         .btn-custom {
             background-color: var(--accent-color);
             color: var(--dark-text);
@@ -74,37 +74,37 @@
             border-radius: 30px;
             transition: all 0.3s ease;
         }
-        
+
         .btn-custom:hover {
             background-color: var(--primary-color);
             transform: translateY(-2px);
             box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
-        
+
         footer {
             background-color: var(--primary-color);
             padding: 2rem 0;
             margin-top: 3rem;
         }
-        
+
         .social-icons a {
             color: var(--dark-text);
             font-size: 1.5rem;
             margin: 0 10px;
             transition: color 0.3s ease;
         }
-        
+
         .social-icons a:hover {
             color: var(--text-color);
         }
-        
+
         .contact-form {
             background-color: white;
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        
+
         .contact-info {
             background-color: var(--accent-color);
             border-radius: 15px;
@@ -112,37 +112,37 @@
             height: 100%;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        
+
         .contact-info h4 {
             color: var(--dark-text);
             margin-bottom: 20px;
         }
-        
+
         .contact-info p {
             margin-bottom: 15px;
         }
-        
+
         .contact-info i {
             width: 30px;
             color: var(--dark-text);
         }
-        
+
         .form-control {
             border-radius: 10px;
             padding: 12px 15px;
             margin-bottom: 20px;
             border: 1px solid #eee;
         }
-        
+
         .form-control:focus {
             box-shadow: none;
             border-color: var(--accent-color);
         }
-        
+
         textarea.form-control {
             min-height: 150px;
         }
-        
+
         .office-hours {
             background-color: white;
             border-radius: 15px;
@@ -150,12 +150,12 @@
             margin-top: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        
+
         .office-hours h4 {
             color: var(--dark-text);
             margin-bottom: 20px;
         }
-        
+
         .office-day {
             display: flex;
             justify-content: space-between;
@@ -163,7 +163,7 @@
             padding-bottom: 10px;
             border-bottom: 1px dashed #eee;
         }
-        
+
         .map-container {
             height: 300px;
             border-radius: 15px;
@@ -226,54 +226,54 @@
                     <div class="contact-form">
                         <h3 class="section-title">Envie uma Mensagem</h3>
                         <form method="POST" novalidate>
-    {% csrf_token %}
+                            {% csrf_token %}
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="id_nome" class="form-label">Nome Completo</label>
-                <input type="text" class="form-control" id="id_nome" name="nome" placeholder="Seu nome" value="{{ form.nome.value|default:'' }}">
-                {% if form.nome.errors %}
-                    <div class="text-danger small">{{ form.nome.errors.0 }}</div>
-                {% endif %}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="id_email" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="id_email" name="email" placeholder="seu.email@exemplo.com" value="{{ form.email.value|default:'' }}">
-                {% if form.email.errors %}
-                    <div class="text-danger small">{{ form.email.errors.0 }}</div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_nome" class="form-label">Nome Completo</label>
+                                        <input type="text" class="form-control" id="id_nome" name="nome" placeholder="Seu nome" value="{{ form.nome.value|default:'' }}">
+                                        {% if form.nome.errors %}
+                                            <div class="text-danger small">{{ form.nome.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_email" class="form-label">E-mail</label>
+                                        <input type="email" class="form-control" id="id_email" name="email" placeholder="seu.email@exemplo.com" value="{{ form.email.value|default:'' }}">
+                                        {% if form.email.errors %}
+                                            <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
 
-    <div class="form-group">
-        <label for="id_assunto" class="form-label">Assunto</label>
-        <input type="text" class="form-control" id="id_assunto" name="assunto" placeholder="Assunto da mensagem" value="{{ form.assunto.value|default:'' }}">
-        {% if form.assunto.errors %}
-            <div class="text-danger small">{{ form.assunto.errors.0 }}</div>
-        {% endif %}
-    </div>
+                            <div class="form-group">
+                                <label for="id_assunto" class="form-label">Assunto</label>
+                                <input type="text" class="form-control" id="id_assunto" name="assunto" placeholder="Assunto da mensagem" value="{{ form.assunto.value|default:'' }}">
+                                {% if form.assunto.errors %}
+                                    <div class="text-danger small">{{ form.assunto.errors.0 }}</div>
+                                {% endif %}
+                            </div>
 
-    <div class="form-group">
-        <label for="id_mensagem" class="form-label">Mensagem</label>
-        <textarea class="form-control" id="id_mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem aqui...">{{ form.mensagem.value|default:'' }}</textarea>
-        {% if form.mensagem.errors %}
-            <div class="text-danger small">{{ form.mensagem.errors.0 }}</div>
-        {% endif %}
-    </div>
+                            <div class="form-group">
+                                <label for="id_mensagem" class="form-label">Mensagem</label>
+                                <textarea class="form-control" id="id_mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem aqui...">{{ form.mensagem.value|default:'' }}</textarea>
+                                {% if form.mensagem.errors %}
+                                    <div class="text-danger small">{{ form.mensagem.errors.0 }}</div>
+                                {% endif %}
+                            </div>
 
-    <div class="form-check mb-4">
-        <input class="form-check-input" type="checkbox" id="newsletter">
-        <label class="form-check-label" for="newsletter">
-            Desejo receber informações sobre publicações e eventos
-        </label>
-    </div>
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="newsletter">
+                                <label class="form-check-label" for="newsletter">
+                                    Desejo receber informações sobre publicações e eventos
+                                </label>
+                            </div>
 
-    <button type="submit" class="btn btn-custom">Enviar Mensagem</button>
-</form>
+                            <button type="submit" class="btn btn-custom">Enviar Mensagem</button>
+                        </form>
                     </div>
                 </div>
                 <div class="col-lg-4">
