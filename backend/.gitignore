@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env/
+myenv/
+ENV/
+# Poetry
+poetry.lock
+
+# Django specific
+*.log
+*.pot
+*.sqlite3
+*.db
+local_settings.py
+/media/
+
+# OS or Editor files
+.DS_Store
+.DS_Store?
+*.swp
+*~
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Coverage data
+.coverage
+.coverage.*
+
+# MyPy cache
+.mypy_cache/
+
+# pyenv
+.python-version
+
+# mkdocs documentation
+/site
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
