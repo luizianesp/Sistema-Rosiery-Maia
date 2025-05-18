@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Áreas de Pesquisa - Profa. Rosiery Maia</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #a8dadc;
+            --secondary-color: #f8edeb;
+            --accent-color: #ffd6e0;
+            --text-color: #457b9d;
+            --dark-text: #1d3557;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: var(--dark-text) !important;
+            font-weight: 600;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-color) !important;
+        }
+        
+        .page-header {
+            background-color: var(--primary-color);
+            padding: 3rem 0;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            color: var(--dark-text);
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 70px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .section {
+            padding: 4rem 0;
+        }
+        
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+            background-color: white;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .btn-custom {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            border: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .social-icons a {
+            color: var(--dark-text);
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--text-color);
+        }
+        
+        .research-area {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .research-area:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .research-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        
+        .research-stats {
+            background-color: var(--accent-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--dark-text);
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Profa. Rosiery Maia</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="pesquisa.html">Áreas de Pesquisa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="projetos.html">Projetos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="publicacoes.html">Publicações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="orientacoes.html">Orientações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contato.html">Contato</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold">Áreas de Pesquisa</h1>
+                    <p class="lead">Conheça os principais temas e linhas de pesquisa em que atuo.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-4 mb-4">
+                    <div class="research-stats">
+                        <p class="stat-number">15+</p>
+                        <p class="stat-label">Anos de Pesquisa</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="research-stats">
+                        <p class="stat-number">45+</p>
+                        <p class="stat-label">Publicações</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="research-stats">
+                        <p class="stat-number">25+</p>
+                        <p class="stat-label">Orientações Concluídas</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="research-area">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center mb-4 mb-md-0">
+                        <i class="fas fa-brain research-icon"></i>
+                    </div>
+                    <div class="col-md-10">
+                        <h3 class="mb-3">Psicologia Educacional</h3>
+                        <p>Nesta linha de pesquisa, investigo os processos cognitivos envolvidos na aprendizagem e como diferentes fatores psicológicos influenciam o desempenho acadêmico dos estudantes. Trabalho com teorias cognitivas e motivacionais para entender como os alunos processam informações, desenvolvem habilidades metacognitivas e regulam sua própria aprendizagem.</p>
+                        <div class="mt-3">
+                            <h5>Tópicos específicos:</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Metacognição e autorregulação da aprendizagem</li>
+                                        <li>Teorias motivacionais e engajamento acadêmico</li>
+                                        <li>Desenvolvimento de habilidades cognitivas</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Estilos e estratégias de aprendizagem</li>
+                                        <li>Ansiedade e desempenho acadêmico</li>
+                                        <li>Saúde mental e bem-estar no contexto educacional</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="research-area">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center mb-4 mb-md-0">
+                        <i class="fas fa-laptop-code research-icon"></i>
+                    </div>
+                    <div class="col-md-10">
+                        <h3 class="mb-3">Tecnologias Educacionais</h3>
+                        <p>Esta linha de pesquisa foca no desenvolvimento, implementação e avaliação de tecnologias digitais no processo educacional. Estudo como diferentes ferramentas tecnológicas podem ser integradas ao currículo para potencializar a aprendizagem, tornando-a mais interativa, personalizada e significativa para os estudantes do século XXI.</p>
+                        <div class="mt-3">
+                            <h5>Tópicos específicos:</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Ambientes virtuais de aprendizagem</li>
+                                        <li>Learning analytics e mineração de dados educacionais</li>
+                                        <li>Gamificação e jogos educativos</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Inteligência artificial aplicada à educação</li>
+                                        <li>Realidade virtual e aumentada no ensino</li>
+                                        <li>Mobile learning e aprendizagem ubíqua</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="research-area">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center mb-4 mb-md-0">
+                        <i class="fas fa-users research-icon"></i>
+                    </div>
+                    <div class="col-md-10">
+                        <h3 class="mb-3">Inclusão e Diversidade</h3>
+                        <p>Nesta linha de pesquisa, investigo práticas pedagógicas inclusivas que atendam à diversidade de perfis, necessidades e contextos dos estudantes. Trabalho com o desenvolvimento de metodologias e recursos que promovam a equidade educacional, garantindo oportunidades de aprendizagem significativas para todos os alunos, independentemente de suas características ou condições específicas.</p>
+                        <div class="mt-3">
+                            <h5>Tópicos específicos:</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Desenho universal para aprendizagem</li>
+                                        <li>Tecnologias assistivas</li>
+                                        <li>Educação multicultural</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Acessibilidade digital</li>
+                                        <li>Políticas de inclusão educacional</li>
+                                        <li>Formação docente para a diversidade</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="research-area">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center mb-4 mb-md-0">
+                        <i class="fas fa-chart-line research-icon"></i>
+                    </div>
+                    <div class="col-md-10">
+                        <h3 class="mb-3">Avaliação Educacional</h3>
+                        <p>Esta linha de pesquisa aborda métodos e processos de avaliação educacional que vão além das abordagens tradicionais. Investigo formas inovadoras de avaliar a aprendizagem dos estudantes, com foco especial em avaliações formativas e autênticas que forneçam informações significativas para orientar o processo de ensino-aprendizagem.</p>
+                        <div class="mt-3">
+                            <h5>Tópicos específicos:</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Avaliação formativa e feedback contínuo</li>
+                                        <li>Avaliação por competências</li>
+                                        <li>Instrumentos diversificados de avaliação</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Portfólios e avaliação autêntica</li>
+                                        <li>Autoavaliação e avaliação entre pares</li>
+                                        <li>Tecnologias para avaliação educacional</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <h5>Profa. Dra. Rosiery Maia</h5>
+                    <p>Universidade do Estado do Rio Grande do Norte-UERN<br>
+                    Departamento de Ciência da Computação<br>
+                    Campus Avancçado de Natal</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="social-icons mb-3">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-researchgate"></i></a>
+                        <a href="#"><i class="fab fa-google"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                    <p>&copy; 2025 Profa. Rosiery Maia. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

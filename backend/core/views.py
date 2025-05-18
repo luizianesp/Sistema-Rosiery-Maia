@@ -4,7 +4,7 @@ from .forms import ContatoForm
 
 
 def home(request):
-    return render(request, '')
+    return render(request, 'core/index.html')
 
 def areas_pesquisa(request):
     areas = AreaPesquisa.objects.all()
