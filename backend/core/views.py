@@ -8,7 +8,7 @@ def home(request):
 
 def areas_pesquisa(request):
     areas = AreaPesquisa.objects.all()
-    return render(request, 'core/areas_pesquisa.html', {'areas': areas})
+    return render(request, 'core/pesquisa.html', {'areas': areas})
 
 def projetos(request):
     projetos = Projeto.objects.all()
@@ -24,10 +24,14 @@ def orientacoes(request):
 
 def contato(request):
     if request.method == 'POST':
+        print("POST")
         form = ContatoForm(request.POST)
         if form.is_valid():
+            print("form valido")
             form.save()
-            return redirect('contato')
+            print("salvo")
+            return redirect('index')
     else:
+        print("nao valido")
         form = ContatoForm()
     return render(request, 'core/contato.html', {'form': form})

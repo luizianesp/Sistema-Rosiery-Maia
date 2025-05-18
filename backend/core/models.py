@@ -39,7 +39,8 @@ class MensagemContato(models.Model):
     email = models.EmailField()
     assunto = models.CharField(max_length=100)
     mensagem = models.TextField()
-    enviada_em = models.DateTimeField(auto_now_add=True)
+    # enviada_em = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.nome
