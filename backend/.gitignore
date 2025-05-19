@@ -16,8 +16,7 @@ poetry.lock
 # Django specific
 *.log
 *.pot
-*.sqlite3
-*.db
+
 local_settings.py
 /media/
 
