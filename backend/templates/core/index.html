@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -196,33 +197,32 @@
         }
     </style>
 </head>
-<body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Profa. Rosiery Maia</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Profa. Rosiery Maia</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
+                        <a class="nav-link active" href="{% url 'index' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pesquisa.html">Áreas de Pesquisa</a>
+                        <a class="nav-link" href="{% url 'pesquisa' %}">Áreas de Pesquisa</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="projetos.html">Projetos</a>
+                        <a class="nav-link" href="{% url 'projetos' %}">Projetos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="publicacoes.html">Publicações</a>
+                        <a class="nav-link" href="{% url 'publicacoes' %}">Publicações</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="orientacoes.html">Orientações</a>
+                        <a class="nav-link" href="{% url 'orientacoes' %}">Orientações</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contato.html">Contato</a>
+                        <a class="nav-link" href="{% url 'contato' %}">Contato</a>
                     </li>
                 </ul>
             </div>
@@ -241,8 +241,8 @@
                     <p class="lead">Professora e Pesquisadora</p>
                     <p class="mt-3">Olá! Sou professora e pesquisadora dedicada à inovação educacional e ao desenvolvimento de novas metodologias de ensino. Com mais de 10 anos de experiência acadêmica, tenho trabalhado em projetos que integram tecnologia e educação para criar experiências de aprendizado mais eficazes e inclusivas.</p>
                     <div class="mt-4">
-                        <a href="contato.html" class="btn btn-custom me-2">Entre em contato</a>
-                        <a href="pesquisa.html" class="btn btn-outline-dark">Conheça minha pesquisa</a>
+                        <a href="{% url 'contato' %}" class="btn btn-custom me-2">Entre em contato</a>
+                        <a href="{% url 'pesquisa' %}" class="btn btn-outline-dark">Conheça minha pesquisa</a>
                     </div>
                 </div>
             </div>
@@ -260,7 +260,7 @@
                             <i class="fas fa-search mb-3" style="font-size: 3rem; color: var(--accent-color);"></i>
                             <h4 class="card-title">Áreas de Pesquisa</h4>
                             <p class="card-text">Conheça minhas principais linhas de pesquisa e projetos acadêmicos em andamento.</p>
-                            <a href="pesquisa.html" class="btn btn-custom mt-3">Saiba mais</a>
+                            <a href="{% url 'pesquisa' %}" class="btn btn-custom mt-3">Saiba mais</a>
                         </div>
                     </div>
                 </div>
@@ -270,7 +270,7 @@
                             <i class="fas fa-project-diagram mb-3" style="font-size: 3rem; color: var(--accent-color);"></i>
                             <h4 class="card-title">Projetos</h4>
                             <p class="card-text">Explore os projetos de pesquisa, ensino e extensão que venho desenvolvendo.</p>
-                            <a href="projetos.html" class="btn btn-custom mt-3">Ver projetos</a>
+                            <a href="{% url 'projetos' %}" class="btn btn-custom mt-3">Ver projetos</a>
                         </div>
                     </div>
                 </div>
@@ -280,7 +280,7 @@
                             <i class="fas fa-book mb-3" style="font-size: 3rem; color: var(--accent-color);"></i>
                             <h4 class="card-title">Publicações</h4>
                             <p class="card-text">Acesse meus artigos, livros e outras publicações acadêmicas recentes.</p>
-                            <a href="publicacoes.html" class="btn btn-custom mt-3">Ver publicações</a>
+                            <a href="{% url 'publicacoes' %}" class="btn btn-custom mt-3">Ver publicações</a>
                         </div>
                     </div>
                 </div>
