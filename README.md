@@ -67,21 +67,12 @@ O site utiliza uma paleta de cores em tons pastéis que pode ser facilmente pers
 }
 ```
 
-### Conteúdo
-
-Para atualizar o conteúdo do site:
-
-1. **Informações Pessoais**: Edite os dados no arquivo `index.html`.
-2. **Áreas de Pesquisa**: Modifique as seções no arquivo `pesquisa.html`.
-3. **Projetos**: Adicione ou remova cartões de projetos no arquivo `projetos.html`.
-4. **Publicações**: Atualize a lista no arquivo `publicacoes.html`.
-5. **Orientações**: Edite as entradas no arquivo `orientacoes.html`.
-6. **Contato**: Atualize as informações no arquivo `contato.html`.
-
-
 ## 📄 Equipe
+
 Luiziane Paulino (Gerente de projeto)
+
 Boris Oliveira (Back-end)
+
 Luis Henrique (Front-end)
 
 
