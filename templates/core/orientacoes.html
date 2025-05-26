@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orientações - Profa. Rosiery Maia</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #a8dadc;
+            --secondary-color: #f8edeb;
+            --accent-color: #ffd6e0;
+            --text-color: #457b9d;
+            --dark-text: #1d3557;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: var(--dark-text) !important;
+            font-weight: 600;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-color) !important;
+        }
+        
+        .page-header {
+            background-color: var(--primary-color);
+            padding: 3rem 0;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            color: var(--dark-text);
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 70px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .section {
+            padding: 4rem 0;
+        }
+        
+        .btn-custom {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            border: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .social-icons a {
+            color: var(--dark-text);
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--text-color);
+        }
+        
+        .student-item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .student-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .student-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 3px solid var(--accent-color);
+        }
+        
+        .student-info {
+            flex: 1;
+        }
+        
+        .student-name {
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 5px;
+        }
+        
+        .student-program {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .student-title {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        .student-year {
+            font-size: 0.8rem;
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            padding: 3px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .student-status {
+            font-size: 0.8rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .status-ongoing {
+            background-color: #a8dadc;
+            color: var(--dark-text);
+        }
+        
+        .status-completed {
+            background-color: #8dd9a0;
+            color: #1d3a29;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--accent-color);
+            color: var(--dark-text) !important;
+        }
+        
+        .nav-pills .nav-link {
+            color: var(--dark-text) !important;
+            border-radius: 30px;
+            margin: 0 5px;
+        }
+        
+        .stats-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 15px;
+            background-color: var(--secondary-color);
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">Profa. Rosiery Maia</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pesquisa' %}">Áreas de Pesquisa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'projetos' %}">Projetos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'publicacoes' %}">Publicações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'orientacoes' %}">Orientações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contato' %}">Contato</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold">Orientações</h1>
+                    <p class="lead">Conheça os alunos que tenho o prazer de orientar em seus trabalhos acadêmicos.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="stats-container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                        <div class="stat-item">
+                            <i class="fas fa-user-graduate stat-icon"></i>
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Doutorandos</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                        <div class="stat-item">
+                            <i class="fas fa-graduation-cap stat-icon"></i>
+                            <div class="stat-number">18</div>
+                            <div class="stat-label">Mestrandos</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                        <div class="stat-item">
+                            <i class="fas fa-book-reader stat-icon"></i>
+                            <div class="stat-number">34</div>
+                            <div class="stat-label">TCC's</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                        <div class="stat-item">
+                            <i class="fas fa-flask stat-icon"></i>
+                            <div class="stat-number">27</div>
+                            <div class="stat-label">Iniciação Científica</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="nav nav-pills mb-4 justify-content-center" id="orientacoes-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active btn-custom me-2" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">Todos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-outline-dark me-2" id="doutorado-tab" data-bs-toggle="pill" data-bs-target="#doutorado" type="button" role="tab" aria-controls="doutorado" aria-selected="false">Doutorado</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-outline-dark me-2" id="mestrado-tab" data-bs-toggle="pill" data-bs-target="#mestrado" type="button" role="tab" aria-controls="mestrado" aria-selected="false">Mestrado</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-outline-dark me-2" id="tcc-tab" data-bs-toggle="pill" data-bs-target="#tcc" type="button" role="tab" aria-controls="tcc" aria-selected="false">TCC</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link btn-outline-dark" id="ic-tab" data-bs-toggle="pill" data-bs-target="#ic" type="button" role="tab" aria-controls="ic" aria-selected="false">Iniciação Científica</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="orientacoesTabContent">
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                    <!-- Doutorado -->
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Carlos Eduardo Santos</h5>
+                            <p class="student-program">Doutorado em Educação</p>
+                            <p class="student-title">Análise de Sistemas Educacionais Adaptativos: Um Estudo sobre Personalização da Aprendizagem baseada em Inteligência Artificial</p>
+                            <span class="student-year">2022-2026</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">O estudo investiga a eficácia de sistemas educacionais adaptativos baseados em IA para promover a personalização da aprendizagem em contextos universitários, avaliando o impacto no desempenho e na motivação dos estudantes.</p>
+                        </div>
+                    </div>
+
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Ana Luíza Ferreira</h5>
+                            <p class="student-program">Doutorado em Educação</p>
+                            <p class="student-title">Inclusão Digital e Acessibilidade: Perspectivas e Práticas para Educação Superior Inclusiva</p>
+                            <span class="student-year">2021-2025</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">A pesquisa analisa políticas e práticas de inclusão digital e acessibilidade no ensino superior, propondo diretrizes para implementação de ambientes virtuais acessíveis e inclusivos.</p>
+                        </div>
+                    </div>
+
+                    <!-- Mestrado -->
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Pedro Henrique Costa</h5>
+                            <p class="student-program">Mestrado em Tecnologia Educacional</p>
+                            <p class="student-title">Gamificação no Ensino de Programação: Impactos na Motivação e Aprendizagem de Estudantes de Computação</p>
+                            <span class="student-year">2023-2025</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">O projeto investiga como elementos de gamificação podem ser aplicados no ensino de programação para aumentar a motivação, o engajamento e a aprendizagem de estudantes de cursos de computação.</p>
+                        </div>
+                    </div>
+
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Mariana Silva Oliveira</h5>
+                            <p class="student-program">Mestrado em Educação</p>
+                            <p class="student-title">Avaliação Formativa Digital: Ferramentas e Estratégias para Feedback Contínuo no Ensino Superior</p>
+                            <span class="student-year">2022-2024</span>
+                            <span class="student-status status-completed">Concluído</span>
+                            <p class="mt-2">A pesquisa analisou diferentes ferramentas e estratégias de avaliação formativa digital, identificando práticas eficazes para fornecer feedback contínuo e personalizado aos estudantes universitários.</p>
+                        </div>
+                    </div>
+
+                    <!-- TCC -->
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Lucas Mendes Almeida</h5>
+                            <p class="student-program">TCC - Licenciatura em Pedagogia</p>
+                            <p class="student-title">Metodologias Ativas na Educação Infantil: Projetos de Aprendizagem Baseada em Problemas</p>
+                            <span class="student-year">2024</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">O trabalho investiga a aplicação de metodologias ativas, especialmente a Aprendizagem Baseada em Problemas, no contexto da educação infantil, analisando seus impactos no desenvolvimento cognitivo e socioemocional das crianças.</p>
+                        </div>
+                    </div>
+
+                    <!-- Iniciação Científica -->
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Juliana Pereira Santos</h5>
+                            <p class="student-program">Iniciação Científica - Psicologia</p>
+                            <p class="student-title">Saúde Mental e Desempenho Acadêmico: Impactos da Ansiedade e Estresse em Estudantes Universitários</p>
+                            <span class="student-year">2023-2024</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">O projeto investiga a relação entre saúde mental e desempenho acadêmico, analisando como a ansiedade e o estresse afetam o processo de aprendizagem de estudantes universitários.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="doutorado" role="tabpanel" aria-labelledby="doutorado-tab">
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Carlos Eduardo Santos</h5>
+                            <p class="student-program">Doutorado em Educação</p>
+                            <p class="student-title">Análise de Sistemas Educacionais Adaptativos: Um Estudo sobre Personalização da Aprendizagem baseada em Inteligência Artificial</p>
+                            <span class="student-year">2022-2026</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">O estudo investiga a eficácia de sistemas educacionais adaptativos baseados em IA para promover a personalização da aprendizagem em contextos universitários, avaliando o impacto no desempenho e na motivação dos estudantes.</p>
+                        </div>
+                    </div>
+
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Ana Luíza Ferreira</h5>
+                            <p class="student-program">Doutorado em Educação</p>
+                            <p class="student-title">Inclusão Digital e Acessibilidade: Perspectivas e Práticas para Educação Superior Inclusiva</p>
+                            <span class="student-year">2021-2025</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">A pesquisa analisa políticas e práticas de inclusão digital e acessibilidade no ensino superior, propondo diretrizes para implementação de ambientes virtuais acessíveis e inclusivos.</p>
+                        </div>
+                    </div>
+
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Rafael Gomes Almeida</h5>
+                            <p class="student-program">Doutorado em Educação</p>
+                            <p class="student-title">Competências Digitais Docentes: Um Framework para Formação Continuada em Contextos Híbridos</p>
+                            <span class="student-year">2020-2024</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">A pesquisa propõe um framework de desenvolvimento de competências digitais para docentes, considerando as demandas emergentes de contextos híbridos de ensino-aprendizagem.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="mestrado" role="tabpanel" aria-labelledby="mestrado-tab">
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Pedro Henrique Costa</h5>
+                            <p class="student-program">Mestrado em Tecnologia Educacional</p>
+                            <p class="student-title">Gamificação no Ensino de Programação: Impactos na Motivação e Aprendizagem de Estudantes de Computação</p>
+                            <span class="student-year">2023-2025</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">O projeto investiga como elementos de gamificação podem ser aplicados no ensino de programação para aumentar a motivação, o engajamento e a aprendizagem de estudantes de cursos de computação.</p>
+                        </div>
+                    </div>
+
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Mariana Silva Oliveira</h5>
+                            <p class="student-program">Mestrado em Educação</p>
+                            <p class="student-title">Avaliação Formativa Digital: Ferramentas e Estratégias para Feedback Contínuo no Ensino Superior</p>
+                            <span class="student-year">2022-2024</span>
+                            <span class="student-status status-completed">Concluído</span>
+                            <p class="mt-2">A pesquisa analisou diferentes ferramentas e estratégias de avaliação formativa digital, identificando práticas eficazes para fornecer feedback contínuo e personalizado aos estudantes universitários.</p>
+                        </div>
+                    </div>
+
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Camila Rodrigues Pereira</h5>
+                            <p class="student-program">Mestrado em Educação</p>
+                            <p class="student-title">Realidade Aumentada na Educação Básica: Possibilidades e Desafios para o Ensino de Ciências</p>
+                            <span class="student-year">2021-2023</span>
+                            <span class="student-status status-completed">Concluído</span>
+                            <p class="mt-2">A dissertação investigou a aplicação de tecnologias de realidade aumentada no ensino de ciências na educação básica, identificando possibilidades, desafios e impactos na aprendizagem dos estudantes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tcc" role="tabpanel" aria-labelledby="tcc-tab">
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Lucas Mendes Almeida</h5>
+                            <p class="student-program">TCC - Licenciatura em Pedagogia</p>
+                            <p class="student-title">Metodologias Ativas na Educação Infantil: Projetos de Aprendizagem Baseada em Problemas</p>
+                            <span class="student-year">2024</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">O trabalho investiga a aplicação de metodologias ativas, especialmente a Aprendizagem Baseada em Problemas, no contexto da educação infantil, analisando seus impactos no desenvolvimento cognitivo e socioemocional das crianças.</p>
+                        </div>
+                    </div>
+
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Fernanda Lima Carvalho</h5>
+                            <p class="student-program">TCC - Licenciatura em Pedagogia</p>
+                            <p class="student-title">Podcasts Educativos: Produção e Uso como Recurso Didático no Ensino Fundamental</p>
+                            <span class="student-year">2023</span>
+                            <span class="student-status status-completed">Concluído</span>
+                            <p class="mt-2">O trabalho explorou o potencial dos podcasts como recursos didáticos no ensino fundamental, analisando processos de produção, estratégias de implementação e impactos na aprendizagem.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="ic" role="tabpanel" aria-labelledby="ic-tab">
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Juliana Pereira Santos</h5>
+                            <p class="student-program">Iniciação Científica - Psicologia</p>
+                            <p class="student-title">Saúde Mental e Desempenho Acadêmico: Impactos da Ansiedade e Estresse em Estudantes Universitários</p>
+                            <span class="student-year">2023-2024</span>
+                            <span class="student-status status-ongoing">Em andamento</span>
+                            <p class="mt-2">O projeto investiga a relação entre saúde mental e desempenho acadêmico, analisando como a ansiedade e o estresse afetam o processo de aprendizagem de estudantes universitários.</p>
+                        </div>
+                    </div>
+
+                    <div class="student-item">
+                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
+                        <div class="student-info">
+                            <h5 class="student-name">Gabriel Martins Silva</h5>
+                            <p class="student-program">Iniciação Científica - Ciência da Computação</p>
+                            <p class="student-title">Desenvolvimento de Aplicativo Mobile para Avaliação Formativa em Sala de Aula</p>
+                            <span class="student-year">2022-2023</span>
+                            <span class="student-status status-completed">Concluído</span>
+                            <p class="mt-2">O projeto envolveu o desenvolvimento e a validação de um aplicativo móvel para facilitar a implementação de estratégias de avaliação formativa em sala de aula, permitindo feedback imediato e personalizado.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-custom">Ver Todos os Orientandos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                     <h5>Profa. Dra. Rosiery Maia</h5>
+                    <p>Universidade do Estado do Rio Grande do Norte-UERN<br>
+                    Departamento de Ciência da Computação<br>
+                    Campus Avançado de Natal</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="social-icons mb-3">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-researchgate"></i></a>
+                        <a href="#"><i class="fab fa-google"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                    <p>&copy; 2025 Profa. Rosiery Maia. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Script para alternar entre as abas
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.nav-pills button');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active', 'btn-custom');
+                        btn.classList.add('btn-outline-dark');
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active', 'btn-custom');
+                    this.classList.remove('btn-outline-dark');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

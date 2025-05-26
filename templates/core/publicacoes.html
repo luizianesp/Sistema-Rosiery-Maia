@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicações - Profa. Rosiery Maia</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #a8dadc;
+            --secondary-color: #f8edeb;
+            --accent-color: #ffd6e0;
+            --text-color: #457b9d;
+            --dark-text: #1d3557;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: var(--dark-text) !important;
+            font-weight: 600;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-color) !important;
+        }
+        
+        .page-header {
+            background-color: var(--primary-color);
+            padding: 3rem 0;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            color: var(--dark-text);
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 70px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .section {
+            padding: 4rem 0;
+        }
+        
+        .btn-custom {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            border: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .social-icons a {
+            color: var(--dark-text);
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--text-color);
+        }
+        
+        .publication-item {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .publication-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .publication-type {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .publication-year {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .publication-title {
+            color: var(--dark-text);
+            margin-bottom: 10px;
+        }
+        
+        .publication-authors {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        .publication-journal {
+            margin-bottom: 15px;
+        }
+        
+        .publication-stats {
+            display: flex;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        
+        .pub-stat {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pub-stat i {
+            color: var(--accent-color);
+            margin-right: 5px;
+        }
+        
+        .filter-buttons {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">Profa. Rosiery Maia</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pesquisa' %}">Áreas de Pesquisa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'projetos' %}">Projetos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'publicacoes' %}">Publicações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'orientacoes' %}">Orientações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contato' %}">Contato</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold">Publicações</h1>
+                    <p class="lead">Conheça meus artigos científicos, livros e outras produções acadêmicas.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="filter-buttons text-center">
+                <button class="btn btn-custom active me-2 mb-2" data-filter="all">Todos</button>
+                <button class="btn btn-outline-dark me-2 mb-2" data-filter="artigo">Artigos</button>
+                <button class="btn btn-outline-dark me-2 mb-2" data-filter="livro">Livros</button>
+                <button class="btn btn-outline-dark me-2 mb-2" data-filter="capitulo">Capítulos</button>
+                <button class="btn btn-outline-dark mb-2" data-filter="conferencia">Conferências</button>
+            </div>
+
+            <div class="publication-list">
+                <div class="publication-item">
+                    <span class="publication-type">Artigo</span>
+                    <span class="publication-year float-end">2024</span>
+                    <h4 class="publication-title">Impactos da Inteligência Artificial na Personalização do Ensino: Um Estudo Longitudinal</h4>
+                    <p class="publication-authors">Maia, R., Silva, J. P., & Oliveira, M. C.</p>
+                    <p class="publication-journal">Revista Brasileira de Tecnologia Educacional, 45(2), 187-205.</p>
+                    <p>Este estudo examina os impactos de sistemas educacionais baseados em inteligência artificial no desempenho acadêmico de estudantes universitários ao longo de quatro semestres consecutivos. Os resultados indicam melhorias significativas na retenção de conhecimento e no desenvolvimento de habilidades metacognitivas.</p>
+                    <div class="publication-stats">
+                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 12 citações</div>
+                        <div class="pub-stat"><i class="fas fa-eye"></i> 458 visualizações</div>
+                        <div class="pub-stat"><i class="fas fa-download"></i> 187 downloads</div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
+                        <a href="#" class="btn btn-outline-dark btn-sm">DOI: 10.1234/rbte.v45i2.187</a>
+                    </div>
+                </div>
+
+                <div class="publication-item">
+                    <span class="publication-type">Livro</span>
+                    <span class="publication-year float-end">2023</span>
+                    <h4 class="publication-title">Tecnologias Educacionais e Aprendizagem Ativa: Fundamentos, Práticas e Perspectivas</h4>
+                    <p class="publication-authors">Maia, R.</p>
+                    <p class="publication-journal">Editora Educação Digital. 324 páginas. ISBN: 978-65-5555-123-4</p>
+                    <p>Esta obra apresenta um panorama abrangente sobre as tecnologias educacionais contemporâneas e suas aplicações em metodologias ativas de aprendizagem. O livro oferece tanto fundamentação teórica quanto orientações práticas para educadores interessados em transformar suas práticas pedagógicas.</p>
+                    <div class="publication-stats">
+                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 23 citações</div>
+                        <div class="pub-stat"><i class="fas fa-star"></i> 4.8/5 (34 reviews)</div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-custom btn-sm">Amostra Gratuita</a>
+                        <a href="#" class="btn btn-outline-dark btn-sm">Amazon</a>
+                    </div>
+                </div>
+
+                <div class="publication-item">
+                    <span class="publication-type">Artigo</span>
+                    <span class="publication-year float-end">2023</span>
+                    <h4 class="publication-title">Desenho Universal para Aprendizagem: Perspectivas e Desafios na Implementação em Instituições de Ensino Superior</h4>
+                    <p class="publication-authors">Maia, R., Santos, A. L., & Ferreira, C. T.</p>
+                    <p class="publication-journal">Revista Inclusão e Educação, 18(4), 312-330.</p>
+                    <p>Este artigo analisa a implementação de princípios do Desenho Universal para Aprendizagem (DUA) em cinco instituições de ensino superior brasileiras, identificando facilitadores, barreiras e estratégias para promover práticas educacionais mais inclusivas no contexto do ensino superior.</p>
+                    <div class="publication-stats">
+                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 8 citações</div>
+                        <div class="pub-stat"><i class="fas fa-eye"></i> 385 visualizações</div>
+                        <div class="pub-stat"><i class="fas fa-download"></i> 142 downloads</div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
+                        <a href="#" class="btn btn-outline-dark btn-sm">DOI: 10.1234/rincedu.v18i4.312</a>
+                    </div>
+                </div>
+
+                <div class="publication-item">
+                    <span class="publication-type">Capítulo</span>
+                    <span class="publication-year float-end">2022</span>
+                    <h4 class="publication-title">Avaliação Formativa em Ambientes Virtuais: Estratégias e Ferramentas</h4>
+                    <p class="publication-authors">Maia, R., & Rodrigues, P. S.</p>
+                    <p class="publication-journal">In C. M. Silva (Org.), Educação Digital: Desafios e Inovações (pp. 121-145). Editora Universitária.</p>
+                    <p>Este capítulo explora estratégias e ferramentas para implementação de avaliação formativa em ambientes virtuais de aprendizagem. São apresentados estudos de caso, exemplos de boas práticas e recomendações para educadores que desejam aprimorar seus processos avaliativos em contextos digitais.</p>
+                    <div class="publication-stats">
+                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 6 citações</div>
+                        <div class="pub-stat"><i class="fas fa-eye"></i> 273 visualizações</div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
+                    </div>
+                </div>
+
+                <div class="publication-item">
+                    <span class="publication-type">Conferência</span>
+                    <span class="publication-year float-end">2022</span>
+                    <h4 class="publication-title">Gamificação no Ensino Superior: Estratégias para Aumentar o Engajamento e a Motivação dos Estudantes</h4>
+                    <p class="publication-authors">Maia, R., & Costa, T. V.</p>
+                    <p class="publication-journal">Anais do XII Congresso Internacional de Tecnologias na Educação, Rio de Janeiro, Brasil, 147-159.</p>
+                    <p>Este trabalho apresenta os resultados de uma intervenção pedagógica baseada em elementos de gamificação em disciplinas de graduação. São discutidos os elementos de jogo utilizados, as estratégias de implementação e os impactos observados no engajamento, na motivação e na aprendizagem dos estudantes.</p>
+                    <div class="publication-stats">
+                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 5 citações</div>
+                        <div class="pub-stat"><i class="fas fa-eye"></i> 312 visualizações</div>
+                        <div class="pub-stat"><i class="fas fa-download"></i> 98 downloads</div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
+                    </div>
+                </div>
+
+                <div class="publication-item">
+                    <span class="publication-type">Artigo</span>
+                    <span class="publication-year float-end">2021</span>
+                    <h4 class="publication-title">Competências Digitais Docentes: Um Modelo para Formação Continuada de Professores no Contexto Pós-Pandêmico</h4>
+                    <p class="publication-authors">Maia, R., Almeida, L. S., & Nunes, F. C.</p>
+                    <p class="publication-journal">Educação & Tecnologia, 15(3), 78-95.</p>
+                    <p>Este artigo propõe um modelo de desenvolvimento de competências digitais para docentes, com base em um estudo realizado com 348 professores da educação básica durante a pandemia de COVID-19. O modelo contempla cinco dimensões de competências essenciais para a atuação docente em cenários híbridos e digitais de ensino-aprendizagem.</p>
+                    <div class="publication-stats">
+                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 15 citações</div>
+                        <div class="pub-stat"><i class="fas fa-eye"></i> 521 visualizações</div>
+                        <div class="pub-stat"><i class="fas fa-download"></i> 203 downloads</div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
+                        <a href="#" class="btn btn-outline-dark btn-sm">DOI: 10.1234/edutec.v15i3.78</a>
+                    </div>
+                </div>
+                
+                <div class="publication-item">
+                    <span class="publication-type">Livro</span>
+                    <span class="publication-year float-end">2020</span>
+                    <h4 class="publication-title">Educação Inclusiva e Tecnologias Digitais: Caminhos para a Equidade</h4>
+                    <p class="publication-authors">Maia, R., & Carvalho, M. T. (Orgs.)</p>
+                    <p class="publication-journal">Editora Acessibilidade. 287 páginas. ISBN: 978-65-8888-456-7</p>
+                    <p>Esta obra coletiva reúne estudos sobre o uso de tecnologias digitais como ferramentas para promoção da inclusão e equidade educacional. São abordados temas como acessibilidade digital, tecnologias assistivas, design universal para aprendizagem e políticas públicas para inclusão digital.</p>
+                    <div class="publication-stats">
+                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 31 citações</div>
+                        <div class="pub-stat"><i class="fas fa-star"></i> 4.9/5 (42 reviews)</div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-custom btn-sm">Amostra Gratuita</a>
+                        <a href="#" class="btn btn-outline-dark btn-sm">Amazon</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-custom">Ver Mais Publicações</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                     <h5>Profa. Dra. Rosiery Maia</h5>
+                    <p>Universidade do Estado do Rio Grande do Norte-UERN<br>
+                    Departamento de Ciência da Computação<br>
+                    Campus Avançado de Natal</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="social-icons mb-3">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-researchgate"></i></a>
+                        <a href="#"><i class="fab fa-google"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                    <p>&copy; 2025 Profa. Rosiery Maia. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Script para filtrar publicações
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-buttons button');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active', 'btn-custom'));
+                    filterButtons.forEach(btn => btn.classList.add('btn-outline-dark'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active', 'btn-custom');
+                    this.classList.remove('btn-outline-dark');
+                    
+                    // Get the filter value
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Filter the publications
+                    filterPublications(filterValue);
+                });
+            });
+            
+            function filterPublications(filter) {
+                const publications = document.querySelectorAll('.publication-item');
+                
+                publications.forEach(pub => {
+                    const type = pub.querySelector('.publication-type').textContent.toLowerCase();
+                    
+                    if (filter === 'all' || type === filter.toLowerCase()) {
+                        pub.style.display = 'block';
+                    } else {
+                        pub.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
