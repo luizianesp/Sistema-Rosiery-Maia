@@ -10,11 +10,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #a8dadc;
+            --primary-color: #9b9b9b;
             --secondary-color: #f8edeb;
-            --accent-color: #ffd6e0;
-            --text-color: #457b9d;
-            --dark-text: #1d3557;
+            --accent-color: #ffa8be;
+            --text-color: #36617c;
+            --dark-text: #3e6cad;
         }
         
         body {
@@ -37,9 +37,15 @@
             color: var(--text-color) !important;
         }
         
+        .nav-link.active {
+            background-color: var(--accent-color);
+            border-radius: 10px;
+            padding: 8px 15px;
+        }
+        
         .page-header {
             background-color: var(--primary-color);
-            padding: 3rem 0;
+            padding: 0rem 0;
             border-radius: 0 0 50px 50px;
             margin-bottom: 3rem;
         }
@@ -110,7 +116,7 @@
         
         footer {
             background-color: var(--primary-color);
-            padding: 2rem 0;
+            padding-top: 0.5rem;
             margin-top: 3rem;
         }
         
@@ -152,7 +158,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Profa. Rosiery Maia</a>
+            <a class="navbar-brand fs-3" href="index.html">Profa. Rosiery Maia</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -215,7 +221,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Pesquisa">
+                                <img src="imagens/AprendizagemAdaptativa.png" class="card-img-top" alt="Projeto de Pesquisa">
                                 <div class="card-body">
                                     <span class="project-category">Pesquisa</span>
                                     <h5 class="card-title">Aprendizagem Adaptativa</h5>
@@ -228,7 +234,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Ensino">
+                                <img src="imagens/MetodologiasAtivas.webp" class="card-img-top" alt="Projeto de Ensino">
                                 <div class="card-body">
                                     <span class="project-category">Ensino</span>
                                     <h5 class="card-title">Metodologias Ativas</h5>
@@ -241,7 +247,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Extensão">
+                                <img src="imagens/EducacaoDigital.webp" class="card-img-top" alt="Projeto de Extensão">
                                 <div class="card-body">
                                     <span class="project-category">Extensão</span>
                                     <h5 class="card-title">Educação Digital para Todos</h5>
@@ -254,7 +260,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Pesquisa">
+                                <img src="imagens/IAnaEducação.webp" class="card-img-top" alt="Projeto de Pesquisa">
                                 <div class="card-body">
                                     <span class="project-category">Pesquisa</span>
                                     <h5 class="card-title">Inteligência Artificial na Educação</h5>
@@ -267,7 +273,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Ensino">
+                                <img src="imagens/AvaliacaoFormativa.jpeg" class="card-img-top" alt="Projeto de Ensino">
                                 <div class="card-body">
                                     <span class="project-category">Ensino</span>
                                     <h5 class="card-title">Avaliação Formativa</h5>
@@ -280,7 +286,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Extensão">
+                                <img src="imagens/FormacaoDocenteDigital.png" class="card-img-top" alt="Projeto de Extensão">
                                 <div class="card-body">
                                     <span class="project-category">Extensão</span>
                                     <h5 class="card-title">Formação Docente Digital</h5>
@@ -297,7 +303,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Pesquisa">
+                                <img src="imagens/AprendizagemAdaptativa.png" class="card-img-top" alt="Projeto de Pesquisa">
                                 <div class="card-body">
                                     <span class="project-category">Pesquisa</span>
                                     <h5 class="card-title">Aprendizagem Adaptativa</h5>
@@ -310,7 +316,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Pesquisa">
+                                <img src="imagens/IAnaEducação.webp" class="card-img-top" alt="Projeto de Pesquisa">
                                 <div class="card-body">
                                     <span class="project-category">Pesquisa</span>
                                     <h5 class="card-title">Inteligência Artificial na Educação</h5>
@@ -327,7 +333,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Ensino">
+                                <img src="imagens/MetodologiasAtivas.webp" class="card-img-top" alt="Projeto de Ensino">
                                 <div class="card-body">
                                     <span class="project-category">Ensino</span>
                                     <h5 class="card-title">Metodologias Ativas</h5>
@@ -340,7 +346,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Ensino">
+                                <img src="imagens/AvaliacaoFormativa.jpeg" class="card-img-top" alt="Projeto de Ensino">
                                 <div class="card-body">
                                     <span class="project-category">Ensino</span>
                                     <h5 class="card-title">Avaliação Formativa</h5>
@@ -357,7 +363,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Extensão">
+                                <img src="imagens/EducacaoDigital.webp" class="card-img-top" alt="Projeto de Extensão">
                                 <div class="card-body">
                                     <span class="project-category">Extensão</span>
                                     <h5 class="card-title">Educação Digital para Todos</h5>
@@ -370,7 +376,7 @@
                         </div>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="/api/placeholder/400/300" class="card-img-top" alt="Projeto de Extensão">
+                                <img src="imagens/FormacaoDocenteDigital.png" class="card-img-top" alt="Projeto de Extensão">
                                 <div class="card-body">
                                     <span class="project-category">Extensão</span>
                                     <h5 class="card-title">Formação Docente Digital</h5>
@@ -398,7 +404,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 mb-4 mb-md-0">
-                            <img src="/api/placeholder/600/400" alt="Aprendizagem Adaptativa" class="img-fluid project-image w-100">
+                            <img src="imagens/AprendizagemAdaptativa.png" alt="Aprendizagem Adaptativa" class="img-fluid project-image w-100">
                         </div>
                         <div class="col-md-6">
                             <span class="project-category">Pesquisa</span>

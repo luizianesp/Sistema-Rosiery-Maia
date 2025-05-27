@@ -10,11 +10,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #a8dadc;
+            --primary-color: #9b9b9b;
             --secondary-color: #f8edeb;
-            --accent-color: #ffd6e0;
-            --text-color: #457b9d;
-            --dark-text: #1d3557;
+            --accent-color: #ffa8be;
+            --text-color: #36617c;
+            --dark-text: #3e6cad;
         }
         
         body {
@@ -33,13 +33,19 @@
             font-weight: 600;
         }
         
+        .nav-link.active {
+            background-color: var(--accent-color);
+            border-radius: 10px;
+            padding: 8px 15px;
+        }
+
         .nav-link:hover {
             color: var(--text-color) !important;
         }
         
         .page-header {
             background-color: var(--primary-color);
-            padding: 3rem 0;
+            padding: 0rem 0;
             border-radius: 0 0 50px 50px;
             margin-bottom: 3rem;
         }
@@ -83,7 +89,7 @@
         
         footer {
             background-color: var(--primary-color);
-            padding: 2rem 0;
+            padding-top: 0.5rem;
             margin-top: 3rem;
         }
         
@@ -165,7 +171,7 @@
         }
         
         .map-container {
-            height: 300px;
+            height: 500px;
             border-radius: 15px;
             overflow: hidden;
             margin-top: 30px;
@@ -177,7 +183,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Profa. Rosiery Maia</a>
+            <a class="navbar-brand fs-3" href="index.html">Profa. Rosiery Maia</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -295,8 +301,16 @@
                 <div class="col-12">
                     <h3 class="section-title">Localização</h3>
                     <div class="map-container">
-                        <!-- Aqui seria inserido um iframe do Google Maps, mas para efeito de demonstração, usamos uma imagem placeholder -->
-                        <img src="/api/placeholder/1200/300" alt="Mapa de localização" class="img-fluid w-100 h-100 object-fit-cover">
+                       <iframe  
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3969.710463345323!2d-35.24231698839196!3d-5.754750894203537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b2ff6649501b3d%3A0x824b8da70b3c06d2!2sUERN%20-%20Universidade%20do%20Estado%20do%20Rio%20Grande%20do%20Norte%20-%20Campus%20Avan%C3%A7ado%20-%20Natal%2FRN!5e0!3m2!1spt-BR!2sbr!4v1748357704421!5m2!1spt-BR!2sbr" 
+                            width="700" 
+                            height="400px" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            width="600"
+                            ></iframe>
                     </div>
                 </div>
             </div>
