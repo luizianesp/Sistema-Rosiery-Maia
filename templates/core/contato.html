@@ -10,11 +10,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #a8dadc;
+            --primary-color: #9b9b9b;
             --secondary-color: #f8edeb;
-            --accent-color: #ffd6e0;
-            --text-color: #457b9d;
-            --dark-text: #1d3557;
+            --accent-color: #ffa8be;
+            --text-color: #36617c;
+            --dark-text: #3e6cad;
         }
 
         body {
@@ -29,8 +29,15 @@
         }
 
         .navbar-brand, .nav-link {
-            color: var(--dark-text) !important;
+            color: var(--secondary-color) !important;
             font-weight: 600;
+        }
+
+        .nav-link.active {
+            background-color: var(--accent-color);
+            color: var(--text-color) !important;
+            border-radius: 10px;
+            padding: 8px 15px;
         }
 
         .nav-link:hover {
@@ -39,7 +46,7 @@
 
         .page-header {
             background-color: var(--primary-color);
-            padding: 3rem 0;
+            padding: 0rem 0;
             border-radius: 0 0 50px 50px;
             margin-bottom: 3rem;
         }
@@ -83,7 +90,7 @@
 
         footer {
             background-color: var(--primary-color);
-            padding: 2rem 0;
+            padding-top: 0.5rem;
             margin-top: 3rem;
         }
 
@@ -165,7 +172,7 @@
         }
 
         .map-container {
-            height: 300px;
+            height: 500px;
             border-radius: 15px;
             overflow: hidden;
             margin-top: 30px;
@@ -177,29 +184,31 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">Profa. Rosiery Maia</a>
+            <a class="navbar-brand fs-3" href="index.html">Profa. Rosiery Maia</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+                        <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'index' %}">Home</a>
+                        <a class="nav-link active" href={% url 'index' %}>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'pesquisa' %}">Áreas de Pesquisa</a>
+                        <a class="nav-link" href={% url 'pesquisa' %}>Áreas de Pesquisa</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'projetos' %}">Projetos</a>
+                        <a class="nav-link" href={% url 'projetos' %}>Projetos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'publicacoes' %}">Publicações</a>
+                        <a class="nav-link" href={% url 'publicacoes' %}>Publicações</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'orientacoes' %}">Orientações</a>
+                        <a class="nav-link" href={% url 'orientacoes' %}>Orientações</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contato' %}">Contato</a>
+                        <a class="nav-link" href={% url 'contato' %}>Contato</a>
+                    </li>
+                    <li class="nav-item ms-3"> <a class="nav-link" href="login.html">Login</a>
                     </li>
                 </ul>
             </div>
@@ -225,53 +234,35 @@
                 <div class="col-lg-8 mb-4 mb-lg-0">
                     <div class="contact-form">
                         <h3 class="section-title">Envie uma Mensagem</h3>
-                        <form method="POST" novalidate>
-                            {% csrf_token %}
-
+                        <form>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="id_nome" class="form-label">Nome Completo</label>
-                                        <input type="text" class="form-control" id="id_nome" name="nome" placeholder="Seu nome" value="{{ form.nome.value|default:'' }}">
-                                        {% if form.nome.errors %}
-                                            <div class="text-danger small">{{ form.nome.errors.0 }}</div>
-                                        {% endif %}
+                                        <label for="name" class="form-label">Nome Completo</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Seu nome">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="id_email" class="form-label">E-mail</label>
-                                        <input type="email" class="form-control" id="id_email" name="email" placeholder="seu.email@exemplo.com" value="{{ form.email.value|default:'' }}">
-                                        {% if form.email.errors %}
-                                            <div class="text-danger small">{{ form.email.errors.0 }}</div>
-                                        {% endif %}
+                                        <label for="email" class="form-label">E-mail</label>
+                                        <input type="email" class="form-control" id="email" placeholder="seu.email@exemplo.com">
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="id_assunto" class="form-label">Assunto</label>
-                                <input type="text" class="form-control" id="id_assunto" name="assunto" placeholder="Assunto da mensagem" value="{{ form.assunto.value|default:'' }}">
-                                {% if form.assunto.errors %}
-                                    <div class="text-danger small">{{ form.assunto.errors.0 }}</div>
-                                {% endif %}
+                                <label for="subject" class="form-label">Assunto</label>
+                                <input type="text" class="form-control" id="subject" placeholder="Assunto da mensagem">
                             </div>
-
                             <div class="form-group">
-                                <label for="id_mensagem" class="form-label">Mensagem</label>
-                                <textarea class="form-control" id="id_mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem aqui...">{{ form.mensagem.value|default:'' }}</textarea>
-                                {% if form.mensagem.errors %}
-                                    <div class="text-danger small">{{ form.mensagem.errors.0 }}</div>
-                                {% endif %}
+                                <label for="message" class="form-label">Mensagem</label>
+                                <textarea class="form-control" id="message" rows="5" placeholder="Digite sua mensagem aqui..."></textarea>
                             </div>
-
                             <div class="form-check mb-4">
-                                <input class="form-check-input" type="checkbox" id="newsletter">
+                                <input class="form-check-input" type="checkbox" value="" id="newsletter">
                                 <label class="form-check-label" for="newsletter">
                                     Desejo receber informações sobre publicações e eventos
                                 </label>
                             </div>
-
                             <button type="submit" class="btn btn-custom">Enviar Mensagem</button>
                         </form>
                     </div>
@@ -308,13 +299,21 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mt-5">
                 <div class="col-12">
                     <h3 class="section-title">Localização</h3>
                     <div class="map-container">
-                        <!-- Aqui seria inserido um iframe do Google Maps, mas para efeito de demonstração, usamos uma imagem placeholder -->
-{#                        <img src="/api/placeholder/1200/300" alt="Mapa de localização" class="img-fluid w-100 h-100 object-fit-cover">#}
+                       <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3969.710463345323!2d-35.24231698839196!3d-5.754750894203537!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b2ff6649501b3d%3A0x824b8da70b3c06d2!2sUERN%20-%20Universidade%20do%20Estado%20do%20Rio%20Grande%20do%20Norte%20-%20Campus%20Avan%C3%A7ado%20-%20Natal%2FRN!5e0!3m2!1spt-BR!2sbr!4v1748357704421!5m2!1spt-BR!2sbr"
+                            width="700"
+                            height="400px"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            width="600"
+                            ></iframe>
                     </div>
                 </div>
             </div>

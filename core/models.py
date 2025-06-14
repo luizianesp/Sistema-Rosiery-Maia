@@ -1,7 +1,23 @@
 from django.db import models
 
+class Topicos(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+
+class Objetivos(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+
+
+
 class AreaPesquisa(models.Model):
     nome = models.CharField(max_length=100)
+    descricao = models.TextField(blank=True, null=True)
+    topico = models.ManyToManyField(Topicos, blank=True)
 
     def __str__(self):
         return self.nome
@@ -10,12 +26,15 @@ class Projeto(models.Model):
     CATEGORIA_CHOICES = [
         ('Pesquisa', 'Pesquisa'),
         ('Ensino', 'Ensino'),
-        ('Extensao', 'Extensão'),
+        ('Extensão', 'Extensão'),
     ]
     titulo = models.CharField(max_length=200)
     descricao = models.TextField()
-    imagem = models.ImageField(upload_to='projetos/')
+    imagem = models.ImageField(upload_to='projetos/', blank=True, null=True)
     categoria = models.CharField(max_length=20, choices=CATEGORIA_CHOICES)
+    financiamento = models.CharField(max_length=100, blank=True, null=True)
+    equipe = models.TextField(blank=True, null=True)
+    objetivos = models.ManyToManyField(Objetivos, blank=True)
 
     def __str__(self):
         return self.titulo

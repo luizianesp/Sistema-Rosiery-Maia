@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -116,7 +117,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# Configurações para arquivos estáticos (CSS, JavaScript, Imagens de template)
+# URL para servir os arquivos estáticos
+STATIC_URL = '/static/'
+
+# Diretórios adicionais onde o Django vai procurar por arquivos estáticos
+# Útil para arquivos estáticos globais do projeto que não pertencem a uma app específica
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# O diretório onde o Django coletará todos os arquivos estáticos
+# quando você rodar `python manage.py collectstatic` (para produção)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+# Configurações para arquivos de mídia (arquivos carregados pelos usuários, como imagens de projetos)
+# URL para servir os arquivos de mídia
+MEDIA_URL = '/media/'
+
+# O diretório onde os arquivos de mídia serão armazenados
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

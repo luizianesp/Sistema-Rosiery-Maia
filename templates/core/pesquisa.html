@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Áreas de Pesquisa - Profa. Rosiery Maia</title>
@@ -10,11 +11,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #a8dadc;
+            --primary-color: #9b9b9b;
             --secondary-color: #f8edeb;
-            --accent-color: #ffd6e0;
-            --text-color: #457b9d;
-            --dark-text: #1d3557;
+            --accent-color: #ffa8be;
+            --text-color: #36617c;
+            --dark-text: #3e6cad;
         }
 
         body {
@@ -29,7 +30,7 @@
         }
 
         .navbar-brand, .nav-link {
-            color: var(--dark-text) !important;
+            color: var(--secondary-color) !important;
             font-weight: 600;
         }
 
@@ -37,9 +38,16 @@
             color: var(--text-color) !important;
         }
 
+        .nav-link.active {
+            background-color: var(--accent-color);
+            color: var(--text-color) !important;
+            border-radius: 10px;
+            padding: 8px 15px;
+        }
+
         .page-header {
             background-color: var(--primary-color);
-            padding: 3rem 0;
+            padding: 0rem 0;
             border-radius: 0 0 50px 50px;
             margin-bottom: 3rem;
         }
@@ -97,7 +105,7 @@
 
         footer {
             background-color: var(--primary-color);
-            padding: 2rem 0;
+            padding-top: 0.5rem;
             margin-top: 3rem;
         }
 
@@ -158,29 +166,31 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Profa. Rosiery Maia</a>
+            <a class="navbar-brand fs-3" href="index.html">Profa. Rosiery Maia</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'index' %}">Home</a>
+                        <a class="nav-link active" href={% url 'index' %}>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'pesquisa' %}">Áreas de Pesquisa</a>
+                        <a class="nav-link" href={% url 'pesquisa' %}>Áreas de Pesquisa</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'projetos' %}">Projetos</a>
+                        <a class="nav-link" href={% url 'projetos' %}>Projetos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'publicacoes' %}">Publicações</a>
+                        <a class="nav-link" href={% url 'publicacoes' %}>Publicações</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'orientacoes' %}">Orientações</a>
+                        <a class="nav-link" href={% url 'orientacoes' %}>Orientações</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contato' %}">Contato</a>
+                        <a class="nav-link" href={% url 'contato' %}>Contato</a>
+                    </li>
+                    <li class="nav-item ms-3"> <a class="nav-link" href="login.html">Login</a>
                     </li>
                 </ul>
             </div>
@@ -223,129 +233,12 @@
                 </div>
             </div>
 
-            <div class="research-area">
-                <div class="row align-items-center">
-                    <div class="col-md-2 text-center mb-4 mb-md-0">
-                        <i class="fas fa-brain research-icon"></i>
-                    </div>
-                    <div class="col-md-10">
-                        <h3 class="mb-3">Psicologia Educacional</h3>
-                        <p>Nesta linha de pesquisa, investigo os processos cognitivos envolvidos na aprendizagem e como diferentes fatores psicológicos influenciam o desempenho acadêmico dos estudantes. Trabalho com teorias cognitivas e motivacionais para entender como os alunos processam informações, desenvolvem habilidades metacognitivas e regulam sua própria aprendizagem.</p>
-                        <div class="mt-3">
-                            <h5>Tópicos específicos:</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Metacognição e autorregulação da aprendizagem</li>
-                                        <li>Teorias motivacionais e engajamento acadêmico</li>
-                                        <li>Desenvolvimento de habilidades cognitivas</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Estilos e estratégias de aprendizagem</li>
-                                        <li>Ansiedade e desempenho acadêmico</li>
-                                        <li>Saúde mental e bem-estar no contexto educacional</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Seção de Áreas de Pesquisa (Dinâmico da API) -->
+            <h2 class="section-title">Detalhes das Áreas de Pesquisa</h2>
+            <div id="dynamic-research-areas" class="row">
+                <!-- As áreas de pesquisa serão carregadas aqui via JavaScript -->
             </div>
-
-            <div class="research-area">
-                <div class="row align-items-center">
-                    <div class="col-md-2 text-center mb-4 mb-md-0">
-                        <i class="fas fa-laptop-code research-icon"></i>
-                    </div>
-                    <div class="col-md-10">
-                        <h3 class="mb-3">Tecnologias Educacionais</h3>
-                        <p>Esta linha de pesquisa foca no desenvolvimento, implementação e avaliação de tecnologias digitais no processo educacional. Estudo como diferentes ferramentas tecnológicas podem ser integradas ao currículo para potencializar a aprendizagem, tornando-a mais interativa, personalizada e significativa para os estudantes do século XXI.</p>
-                        <div class="mt-3">
-                            <h5>Tópicos específicos:</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Ambientes virtuais de aprendizagem</li>
-                                        <li>Learning analytics e mineração de dados educacionais</li>
-                                        <li>Gamificação e jogos educativos</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Inteligência artificial aplicada à educação</li>
-                                        <li>Realidade virtual e aumentada no ensino</li>
-                                        <li>Mobile learning e aprendizagem ubíqua</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="research-area">
-                <div class="row align-items-center">
-                    <div class="col-md-2 text-center mb-4 mb-md-0">
-                        <i class="fas fa-users research-icon"></i>
-                    </div>
-                    <div class="col-md-10">
-                        <h3 class="mb-3">Inclusão e Diversidade</h3>
-                        <p>Nesta linha de pesquisa, investigo práticas pedagógicas inclusivas que atendam à diversidade de perfis, necessidades e contextos dos estudantes. Trabalho com o desenvolvimento de metodologias e recursos que promovam a equidade educacional, garantindo oportunidades de aprendizagem significativas para todos os alunos, independentemente de suas características ou condições específicas.</p>
-                        <div class="mt-3">
-                            <h5>Tópicos específicos:</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Desenho universal para aprendizagem</li>
-                                        <li>Tecnologias assistivas</li>
-                                        <li>Educação multicultural</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Acessibilidade digital</li>
-                                        <li>Políticas de inclusão educacional</li>
-                                        <li>Formação docente para a diversidade</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="research-area">
-                <div class="row align-items-center">
-                    <div class="col-md-2 text-center mb-4 mb-md-0">
-                        <i class="fas fa-chart-line research-icon"></i>
-                    </div>
-                    <div class="col-md-10">
-                        <h3 class="mb-3">Avaliação Educacional</h3>
-                        <p>Esta linha de pesquisa aborda métodos e processos de avaliação educacional que vão além das abordagens tradicionais. Investigo formas inovadoras de avaliar a aprendizagem dos estudantes, com foco especial em avaliações formativas e autênticas que forneçam informações significativas para orientar o processo de ensino-aprendizagem.</p>
-                        <div class="mt-3">
-                            <h5>Tópicos específicos:</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Avaliação formativa e feedback contínuo</li>
-                                        <li>Avaliação por competências</li>
-                                        <li>Instrumentos diversificados de avaliação</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li>Portfólios e avaliação autêntica</li>
-                                        <li>Autoavaliação e avaliação entre pares</li>
-                                        <li>Tecnologias para avaliação educacional</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <hr class="my-5">
         </div>
     </section>
 
@@ -374,5 +267,76 @@
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL da sua API de Áreas de Pesquisa. Ajuste se o caminho for diferente.
+            // Presume-se que a API esteja disponível em '/api/areas/'.
+            fetch('/api/areas/')
+                .then(response => {
+                    // Verifica se a resposta da rede foi bem-sucedida
+                    if (!response.ok) {
+                        throw new Error('Erro na rede: ' + response.statusText);
+                    }
+                    return response.json(); // Converte a resposta para JSON
+                })
+                .then(data => {
+                    // Obtém o elemento HTML onde as áreas de pesquisa dinâmicas serão inseridas
+                    const container = document.getElementById('dynamic-research-areas');
+
+                    // Se não houver dados, exibe uma mensagem
+                    if (data.length === 0) {
+                        container.innerHTML = '<p class="text-center w-100">Nenhuma área de pesquisa encontrada no banco de dados.</p>';
+                        return;
+                    }
+
+                    // Itera sobre os dados recebidos da API
+                    data.forEach(area => {
+                        // Cria um novo elemento div para cada área de pesquisa
+                        const areaDiv = document.createElement('div');
+                        // Adiciona classes Bootstrap para layout responsivo (colunas)
+                        areaDiv.className = 'col-md-12 col-lg-12 mb-12';
+
+                        // Constrói a lista de tópicos
+                        let topicosHtml = '';
+                        if (area.topico && area.topico.length > 0) {
+                            topicosHtml = `<h5>Principais Tópicos:</h5><ul>`;
+                            area.topico.forEach(topico => {
+                                topicosHtml += `<li>${topico.nome}</li>`;
+                            });
+                            topicosHtml += `</ul>`;
+                        } else {
+                            topicosHtml = `<p>Nenhum tópico associado.</p>`;
+                        }
+
+                        // Define o conteúdo HTML para a área de pesquisa
+                        areaDiv.innerHTML = `
+                                    <div class="research-area">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2 text-center mb-4 mb-md-0">
+                                                <i class="fas fa-chart-line research-icon"></i>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <h3 class="mb-3">${area.nome}</h3>
+                                                <p>${area.descricao || 'Descrição não disponível.'}</p>
+                                                <div class="mt-3">
+                                                    ${topicosHtml}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        `;
+                        // Adiciona a nova div ao contêiner
+                        container.appendChild(areaDiv);
+                    });
+                })
+                .catch(error => {
+                    // Captura e loga quaisquer erros que ocorram durante a requisição ou processamento dos dados
+                    console.error('Houve um erro ao buscar as áreas de pesquisa:', error);
+                    const container = document.getElementById('dynamic-research-areas');
+                    // Exibe uma mensagem de erro para o usuário
+                    container.innerHTML = '<p class="text-center w-100 text-danger">Não foi possível carregar as áreas de pesquisa. Por favor, tente novamente mais tarde.</p>';
+                });
+        });
+    </script>
 </body>
 </html>
