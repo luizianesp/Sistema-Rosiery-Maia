@@ -21,10 +21,25 @@ from core.api_urls import api
 # Importar settings e static para servir arquivos em desenvolvimento
 from django.conf import settings
 from django.conf.urls.static import static
+
+from core.views import user_logout, user_login, admin_panel_content, admin_dashboard
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', api.urls),  # 🔥 API Django Ninja
     path('', include('core.urls')),  # 🔗 Rotas tradicionais
+
+# URLs de autenticação
+    path('login/', user_login, name='login'), # URL para a sua página de login
+    path('logout/', user_logout, name='logout'), # URL para o logout
+
+    # === URLs do Painel Administrativo ===
+    path('dashboard/', admin_dashboard, name='dashboard'),  # URL do Dashboard
+
+    # URLs para carregar conteúdo dinâmico no painel administrativo
+    # Estes mapearão para as partes de template que criaremos
+    path('admin/conteudo/<str:template_name>/', admin_panel_content, name='admin_content'),
+
 ]
 
 if settings.DEBUG:

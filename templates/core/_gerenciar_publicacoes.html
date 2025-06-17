@@ -1,0 +1,305 @@
+{% extends 'core/base_admin.html' %}
+kkkkkkkkkkkkkkkkkkkk
+<div class="content-area">
+    <h1>Gerenciar Publicações</h1>
+    <p class="lead">Aqui você pode adicionar, editar ou remover publicações do site.</p>
+
+    <!-- Botões de Ação -->
+    <div class="mb-3">
+        <button type="button" class="btn btn-primary me-2" style="background-color: var(--accent-color); border-color: var(--accent-color); color: white;" id="addPublicationBtn">
+            <i class="fas fa-plus-circle me-2"></i>Adicionar Nova Publicação
+        </button>
+    </div>
+
+    <!-- Formulário de Adicionar/Editar Publicação (Inicialmente oculto) -->
+    <div class="card p-4 shadow-sm mb-4" id="publicationFormCard" style="display: none;">
+        <h5><span id="formTitle">Adicionar</span> Publicação</h5>
+        <form id="publicationForm">
+            {% csrf_token %} {# CSRF token é necessário para POST/PUT/DELETE #}
+            <input type="hidden" id="publicationId"> {# Para armazenar o ID ao editar #}
+
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Título</label>
+                <input type="text" class="form-control" id="titulo" required>
+            </div>
+            <div class="mb-3">
+                <label for="autores" class="form-label">Autores</label>
+                <input type="text" class="form-control" id="autores" required>
+            </div>
+            <div class="mb-3">
+                <label for="ano" class="form-label">Ano</label>
+                <input type="number" class="form-control" id="ano" required>
+            </div>
+            <div class="mb-3">
+                <label for="publicado_no" class="form-label">Publicado em (Ex: Revista X, Editora Y)</label>
+                <input type="text" class="form-control" id="publicado_no" required>
+            </div>
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoria</label>
+                <select class="form-select" id="categoria" required>
+                    <option value="">Selecione a Categoria</option>
+                    <option value="Artigo">Artigo</option>
+                    <option value="Livro">Livro</option>
+                    <option value="Capitulo">Capítulo</option>
+                    <option value="Conferencia">Conferência</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição (Opcional)</label>
+                <textarea class="form-control" id="descricao" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="link" class="form-label">Link da Publicação</label>
+                <input type="url" class="form-control" id="link" required>
+            </div>
+            <div class="mb-3">
+                <label for="arquivo" class="form-label">Arquivo PDF (URL Opcional)</label>
+                <input type="url" class="form-control" id="arquivo">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="background-color: var(--accent-color); border-color: var(--accent-color); color: white;">
+                <i class="fas fa-save me-2"></i>Salvar Publicação
+            </button>
+            <button type="button" class="btn btn-secondary ms-2" id="cancelFormBtn">
+                Cancelar
+            </button>
+        </form>
+        <div id="form-feedback" class="mt-3" style="display: none;"></div>
+    </div>
+
+    <!-- Tabela de Publicações -->
+    <div class="card p-3 shadow-sm">
+        <h5>Publicações Atuais</h5>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autores</th>
+                        <th>Ano</th>
+                        <th>Categoria</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="publicationsTableBody">
+                    <!-- Publicações serão carregadas dinamicamente aqui -->
+                    <tr><td colspan="6" class="text-center">Carregando publicações...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="table-feedback" class="mt-3" style="display: none;"></div>
+    </div>
+</div>
+
+<script>
+    // Script específico para Gerenciar Publicações
+    document.addEventListener('DOMContentLoaded', function() {
+        const publicationsApiUrl = '/api/publicacoes/';
+        const publicationsTableBody = document.getElementById('publicationsTableBody');
+        const addPublicationBtn = document.getElementById('addPublicationBtn');
+        const publicationFormCard = document.getElementById('publicationFormCard');
+        const publicationForm = document.getElementById('publicationForm');
+        const formTitle = document.getElementById('formTitle');
+        const publicationIdInput = document.getElementById('publicationId');
+        const cancelFormBtn = document.getElementById('cancelFormBtn');
+        const formFeedback = document.getElementById('form-feedback');
+        const tableFeedback = document.getElementById('table-feedback');
+
+        // Referências aos campos do formulário
+        const tituloInput = document.getElementById('titulo');
+        const autoresInput = document.getElementById('autores');
+        const anoInput = document.getElementById('ano');
+        const publicadoNoInput = document.getElementById('publicado_no');
+        const categoriaSelect = document.getElementById('categoria');
+        const descricaoInput = document.getElementById('descricao');
+        const linkInput = document.getElementById('link');
+        const arquivoInput = document.getElementById('arquivo');
+
+        let currentEditId = null; // Para controlar qual publicação está sendo editada
+
+        // --- Funções de Utilitário ---
+        function getCsrfToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+
+        function showFeedback(element, message, type = 'info') {
+            element.textContent = message;
+            element.className = `alert alert-${type}`;
+            element.style.display = 'block';
+            setTimeout(() => element.style.display = 'none', 5000);
+        }
+
+        function clearForm() {
+            publicationForm.reset();
+            publicationIdInput.value = '';
+            currentEditId = null;
+            formTitle.textContent = 'Adicionar';
+            publicationFormCard.style.display = 'none'; // Esconde o formulário
+            formFeedback.style.display = 'none';
+        }
+
+        // --- Funções de Renderização e Carga de Dados ---
+        async function fetchPublications() {
+            publicationsTableBody.innerHTML = '<tr><td colspan="6" class="text-center">Carregando publicações...</td></tr>';
+            try {
+                const response = await fetch(publicationsApiUrl);
+                if (!response.ok) throw new Error('Erro ao carregar publicações.');
+                const publications = await response.json();
+                renderPublicationsTable(publications);
+            } catch (error) {
+                console.error('Erro ao buscar publicações:', error);
+                publicationsTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Falha ao carregar publicações.</td></tr>';
+                showFeedback(tableFeedback, 'Erro ao carregar publicações.', 'danger');
+            }
+        }
+
+        function renderPublicationsTable(publications) {
+            publicationsTableBody.innerHTML = ''; // Limpa a tabela
+            if (publications.length === 0) {
+                publicationsTableBody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhuma publicação encontrada.</td></tr>';
+                return;
+            }
+
+            publications.forEach(pub => {
+                const row = publicationsTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${pub.id}</td>
+                    <td>${pub.titulo}</td>
+                    <td>${pub.autores}</td>
+                    <td>${pub.ano}</td>
+                    <td>${pub.categoria}</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm me-2 edit-btn" data-id="${pub.id}">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${pub.id}">
+                            <i class="fas fa-trash"></i> Remover
+                        </button>
+                    </td>
+                `;
+            });
+
+            // Adiciona listeners para os botões de Editar e Remover
+            document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', handleEdit));
+            document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
+        }
+
+        // --- Handlers de Eventos do Formulário e Botões ---
+        addPublicationBtn.addEventListener('click', () => {
+            clearForm();
+            publicationFormCard.style.display = 'block'; // Mostra o formulário
+            tituloInput.focus();
+        });
+
+        cancelFormBtn.addEventListener('click', clearForm);
+
+        publicationForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const payload = {
+                titulo: tituloInput.value,
+                autores: autoresInput.value,
+                ano: parseInt(anoInput.value),
+                publicado_no: publicadoNoInput.value,
+                categoria: categoriaSelect.value,
+                descricao: descricaoInput.value || null,
+                link: linkInput.value,
+                arquivo: arquivoInput.value || null,
+            };
+
+            const csrfToken = getCsrfToken();
+            let method = 'POST';
+            let url = publicationsApiUrl;
+
+            if (currentEditId) {
+                method = 'PUT';
+                url += `${currentEditId}/`;
+            }
+
+            try {
+                showFeedback(formFeedback, 'Salvando publicação...', 'info');
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken,
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao salvar publicação.');
+                }
+
+                const result = await response.json();
+                showFeedback(formFeedback, `Publicação "${result.titulo}" salva com sucesso!`, 'success');
+                clearForm();
+                fetchPublications(); // Recarrega a tabela
+            } catch (error) {
+                console.error('Erro ao salvar publicação:', error);
+                showFeedback(formFeedback, error.message, 'danger');
+            }
+        });
+
+        async function handleEdit(event) {
+            const id = event.target.dataset.id;
+            try {
+                const response = await fetch(`${publicationsApiUrl}${id}/`);
+                if (!response.ok) throw new Error('Publicação não encontrada.');
+                const pub = await response.json();
+
+                // Preenche o formulário
+                tituloInput.value = pub.titulo;
+                autoresInput.value = pub.autores;
+                anoInput.value = pub.ano;
+                publicadoNoInput.value = pub.publicado_no;
+                categoriaSelect.value = pub.categoria;
+                descricaoInput.value = pub.descricao || '';
+                linkInput.value = pub.link;
+                arquivoInput.value = pub.arquivo || '';
+
+                publicationIdInput.value = pub.id;
+                currentEditId = pub.id;
+                formTitle.textContent = 'Editar';
+                publicationFormCard.style.display = 'block'; // Mostra o formulário
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Rola para o topo para ver o formulário
+            } catch (error) {
+                console.error('Erro ao buscar publicação para edição:', error);
+                showFeedback(tableFeedback, 'Erro ao carregar publicação para edição.', 'danger');
+            }
+        }
+
+        async function handleDelete(event) {
+            const id = event.target.dataset.id;
+            if (!confirm('Tem certeza que deseja remover esta publicação?')) { // Use um modal personalizado em vez de confirm() se preferir
+                return;
+            }
+
+            try {
+                const csrfToken = getCsrfToken();
+                const response = await fetch(`${publicationsApiUrl}${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                    },
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Erro ao remover publicação.');
+                }
+
+                showFeedback(tableFeedback, 'Publicação removida com sucesso!', 'success');
+                fetchPublications(); // Recarrega a tabela
+            } catch (error) {
+                console.error('Erro ao remover publicação:', error);
+                showFeedback(tableFeedback, error.message, 'danger');
+            }
+        }
+
+        // --- Inicialização ---
+        fetchPublications();
+    });
+</script>

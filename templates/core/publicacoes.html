@@ -128,6 +128,7 @@
             font-weight: 600;
             display: inline-block;
             margin-bottom: 10px;
+            text-transform: capitalize; /* Para garantir que a primeira letra seja maiúscula */
         }
 
         .publication-year {
@@ -231,131 +232,14 @@
                 <button class="btn btn-outline-dark mb-2" data-filter="conferencia">Conferências</button>
             </div>
 
-            <div class="publication-list">
-                <div class="publication-item">
-                    <span class="publication-type">Artigo</span>
-                    <span class="publication-year float-end">2024</span>
-                    <h4 class="publication-title">Impactos da Inteligência Artificial na Personalização do Ensino: Um Estudo Longitudinal</h4>
-                    <p class="publication-authors">Maia, R., Silva, J. P., & Oliveira, M. C.</p>
-                    <p class="publication-journal">Revista Brasileira de Tecnologia Educacional, 45(2), 187-205.</p>
-                    <p>Este estudo examina os impactos de sistemas educacionais baseados em inteligência artificial no desempenho acadêmico de estudantes universitários ao longo de quatro semestres consecutivos. Os resultados indicam melhorias significativas na retenção de conhecimento e no desenvolvimento de habilidades metacognitivas.</p>
-                    <div class="publication-stats">
-                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 12 citações</div>
-                        <div class="pub-stat"><i class="fas fa-eye"></i> 458 visualizações</div>
-                        <div class="pub-stat"><i class="fas fa-download"></i> 187 downloads</div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
-                        <a href="#" class="btn btn-outline-dark btn-sm">DOI: 10.1234/rbte.v45i2.187</a>
-                    </div>
-                </div>
-
-                <div class="publication-item">
-                    <span class="publication-type">Livro</span>
-                    <span class="publication-year float-end">2023</span>
-                    <h4 class="publication-title">Tecnologias Educacionais e Aprendizagem Ativa: Fundamentos, Práticas e Perspectivas</h4>
-                    <p class="publication-authors">Maia, R.</p>
-                    <p class="publication-journal">Editora Educação Digital. 324 páginas. ISBN: 978-65-5555-123-4</p>
-                    <p>Esta obra apresenta um panorama abrangente sobre as tecnologias educacionais contemporâneas e suas aplicações em metodologias ativas de aprendizagem. O livro oferece tanto fundamentação teórica quanto orientações práticas para educadores interessados em transformar suas práticas pedagógicas.</p>
-                    <div class="publication-stats">
-                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 23 citações</div>
-                        <div class="pub-stat"><i class="fas fa-star"></i> 4.8/5 (34 reviews)</div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-custom btn-sm">Amostra Gratuita</a>
-                        <a href="#" class="btn btn-outline-dark btn-sm">Amazon</a>
-                    </div>
-                </div>
-
-                <div class="publication-item">
-                    <span class="publication-type">Artigo</span>
-                    <span class="publication-year float-end">2023</span>
-                    <h4 class="publication-title">Desenho Universal para Aprendizagem: Perspectivas e Desafios na Implementação em Instituições de Ensino Superior</h4>
-                    <p class="publication-authors">Maia, R., Santos, A. L., & Ferreira, C. T.</p>
-                    <p class="publication-journal">Revista Inclusão e Educação, 18(4), 312-330.</p>
-                    <p>Este artigo analisa a implementação de princípios do Desenho Universal para Aprendizagem (DUA) em cinco instituições de ensino superior brasileiras, identificando facilitadores, barreiras e estratégias para promover práticas educacionais mais inclusivas no contexto do ensino superior.</p>
-                    <div class="publication-stats">
-                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 8 citações</div>
-                        <div class="pub-stat"><i class="fas fa-eye"></i> 385 visualizações</div>
-                        <div class="pub-stat"><i class="fas fa-download"></i> 142 downloads</div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
-                        <a href="#" class="btn btn-outline-dark btn-sm">DOI: 10.1234/rincedu.v18i4.312</a>
-                    </div>
-                </div>
-
-                <div class="publication-item">
-                    <span class="publication-type">Capítulo</span>
-                    <span class="publication-year float-end">2022</span>
-                    <h4 class="publication-title">Avaliação Formativa em Ambientes Virtuais: Estratégias e Ferramentas</h4>
-                    <p class="publication-authors">Maia, R., & Rodrigues, P. S.</p>
-                    <p class="publication-journal">In C. M. Silva (Org.), Educação Digital: Desafios e Inovações (pp. 121-145). Editora Universitária.</p>
-                    <p>Este capítulo explora estratégias e ferramentas para implementação de avaliação formativa em ambientes virtuais de aprendizagem. São apresentados estudos de caso, exemplos de boas práticas e recomendações para educadores que desejam aprimorar seus processos avaliativos em contextos digitais.</p>
-                    <div class="publication-stats">
-                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 6 citações</div>
-                        <div class="pub-stat"><i class="fas fa-eye"></i> 273 visualizações</div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
-                    </div>
-                </div>
-
-                <div class="publication-item">
-                    <span class="publication-type">Conferência</span>
-                    <span class="publication-year float-end">2022</span>
-                    <h4 class="publication-title">Gamificação no Ensino Superior: Estratégias para Aumentar o Engajamento e a Motivação dos Estudantes</h4>
-                    <p class="publication-authors">Maia, R., & Costa, T. V.</p>
-                    <p class="publication-journal">Anais do XII Congresso Internacional de Tecnologias na Educação, Rio de Janeiro, Brasil, 147-159.</p>
-                    <p>Este trabalho apresenta os resultados de uma intervenção pedagógica baseada em elementos de gamificação em disciplinas de graduação. São discutidos os elementos de jogo utilizados, as estratégias de implementação e os impactos observados no engajamento, na motivação e na aprendizagem dos estudantes.</p>
-                    <div class="publication-stats">
-                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 5 citações</div>
-                        <div class="pub-stat"><i class="fas fa-eye"></i> 312 visualizações</div>
-                        <div class="pub-stat"><i class="fas fa-download"></i> 98 downloads</div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
-                    </div>
-                </div>
-
-                <div class="publication-item">
-                    <span class="publication-type">Artigo</span>
-                    <span class="publication-year float-end">2021</span>
-                    <h4 class="publication-title">Competências Digitais Docentes: Um Modelo para Formação Continuada de Professores no Contexto Pós-Pandêmico</h4>
-                    <p class="publication-authors">Maia, R., Almeida, L. S., & Nunes, F. C.</p>
-                    <p class="publication-journal">Educação & Tecnologia, 15(3), 78-95.</p>
-                    <p>Este artigo propõe um modelo de desenvolvimento de competências digitais para docentes, com base em um estudo realizado com 348 professores da educação básica durante a pandemia de COVID-19. O modelo contempla cinco dimensões de competências essenciais para a atuação docente em cenários híbridos e digitais de ensino-aprendizagem.</p>
-                    <div class="publication-stats">
-                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 15 citações</div>
-                        <div class="pub-stat"><i class="fas fa-eye"></i> 521 visualizações</div>
-                        <div class="pub-stat"><i class="fas fa-download"></i> 203 downloads</div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-custom btn-sm">Download PDF</a>
-                        <a href="#" class="btn btn-outline-dark btn-sm">DOI: 10.1234/edutec.v15i3.78</a>
-                    </div>
-                </div>
-                
-                <div class="publication-item">
-                    <span class="publication-type">Livro</span>
-                    <span class="publication-year float-end">2020</span>
-                    <h4 class="publication-title">Educação Inclusiva e Tecnologias Digitais: Caminhos para a Equidade</h4>
-                    <p class="publication-authors">Maia, R., & Carvalho, M. T. (Orgs.)</p>
-                    <p class="publication-journal">Editora Acessibilidade. 287 páginas. ISBN: 978-65-8888-456-7</p>
-                    <p>Esta obra coletiva reúne estudos sobre o uso de tecnologias digitais como ferramentas para promoção da inclusão e equidade educacional. São abordados temas como acessibilidade digital, tecnologias assistivas, design universal para aprendizagem e políticas públicas para inclusão digital.</p>
-                    <div class="publication-stats">
-                        <div class="pub-stat"><i class="fas fa-quote-right"></i> 31 citações</div>
-                        <div class="pub-stat"><i class="fas fa-star"></i> 4.9/5 (42 reviews)</div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="#" class="btn btn-custom btn-sm">Amostra Gratuita</a>
-                        <a href="#" class="btn btn-outline-dark btn-sm">Amazon</a>
-                    </div>
-                </div>
+            <div class="publication-list" id="dynamic-publications">
+                <!-- Publicações serão carregadas dinamicamente aqui -->
+                <p class="text-center w-100" id="loading-message">Carregando publicações...</p>
             </div>
 
             <div class="text-center mt-5">
-                <a href="#" class="btn btn-custom">Ver Mais Publicações</a>
+                <!-- Botão "Ver Mais" pode ser usado para paginação ou apenas removido se todos carregarem de uma vez -->
+                <a href="#" class="btn btn-custom" style="display: none;">Ver Mais Publicações</a>
             </div>
         </div>
     </section>
@@ -385,43 +269,97 @@
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
-        // Script para filtrar publicações
         document.addEventListener('DOMContentLoaded', function() {
+            const publicationsApiUrl = '/api/publicacoes/'; // URL da sua API de Publicações
+            let allPublications = []; // Para armazenar todas as publicações
+
+            const dynamicPublicationsContainer = document.getElementById('dynamic-publications');
+            const loadingMessage = document.getElementById('loading-message');
             const filterButtons = document.querySelectorAll('.filter-buttons button');
-            
+
+            // Função para renderizar as publicações no HTML
+            function renderPublications(publicationsToDisplay) {
+                dynamicPublicationsContainer.innerHTML = ''; // Limpa o conteúdo atual
+
+                if (publicationsToDisplay.length === 0) {
+                    dynamicPublicationsContainer.innerHTML = '<p class="text-center w-100">Nenhuma publicação encontrada para esta categoria.</p>';
+                    return;
+                }
+
+                publicationsToDisplay.forEach(pub => {
+                    const downloadPdfButton = pub.arquivo ?
+                        `<a href="${pub.arquivo}" class="btn btn-custom btn-sm" download>Download PDF</a>` : '';
+
+                    const externalLinkButton = pub.link ?
+                        `<a href="${pub.link}" class="btn btn-outline-dark btn-sm" target="_blank">Acessar Publicação</a>` : '';
+
+                    const pubHtml = `
+                        <div class="publication-item" data-category="${pub.categoria.toLowerCase()}">
+                            <span class="publication-type">${pub.categoria}</span>
+                            <span class="publication-year float-end">${pub.ano}</span>
+                            <h4 class="publication-title">${pub.titulo}</h4>
+                            <p class="publication-authors">${pub.autores}</p>
+                            <p class="publication-journal">${pub.publicado_no}</p>
+                            <p>${pub.descricao || ''}</p>
+                            <!-- Estatísticas (ex: citações, visualizações, downloads) não estão na API atual,
+                                 então são deixadas como estáticas ou removidas. Você pode adicionar mock-data ou remover. -->
+                            <div class="publication-stats">
+                                <div class="pub-stat"><i class="fas fa-quote-right"></i> 0 citações</div>
+                                <div class="pub-stat"><i class="fas fa-eye"></i> 0 visualizações</div>
+                                <div class="pub-stat"><i class="fas fa-download"></i> 0 downloads</div>
+                            </div>
+                            <div class="mt-3">
+                                ${downloadPdfButton}
+                                ${externalLinkButton}
+                            </div>
+                        </div>
+                    `;
+                    dynamicPublicationsContainer.innerHTML += pubHtml;
+                });
+            }
+
+            // Função para filtrar e exibir publicações
+            function filterPublications(filter) {
+                const filtered = filter === 'all' ? allPublications :
+                                 allPublications.filter(pub => pub.categoria.toLowerCase() === filter);
+                renderPublications(filtered);
+            }
+
+            // Adiciona listeners aos botões de filtro
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active', 'btn-custom'));
-                    filterButtons.forEach(btn => btn.classList.add('btn-outline-dark'));
-                    
-                    // Add active class to clicked button
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active', 'btn-custom');
+                        btn.classList.add('btn-outline-dark');
+                    });
                     this.classList.add('active', 'btn-custom');
                     this.classList.remove('btn-outline-dark');
-                    
-                    // Get the filter value
+
                     const filterValue = this.getAttribute('data-filter');
-                    
-                    // Filter the publications
                     filterPublications(filterValue);
                 });
             });
-            
-            function filterPublications(filter) {
-                const publications = document.querySelectorAll('.publication-item');
-                
-                publications.forEach(pub => {
-                    const type = pub.querySelector('.publication-type').textContent.toLowerCase();
-                    
-                    if (filter === 'all' || type === filter.toLowerCase()) {
-                        pub.style.display = 'block';
-                    } else {
-                        pub.style.display = 'none';
+
+            // Faz a requisição à API para carregar as publicações
+            fetch(publicationsApiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar publicações: ' + response.statusText);
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    allPublications = data; // Armazena todas as publicações
+                    loadingMessage.style.display = 'none'; // Esconde a mensagem de carregamento
+                    filterPublications('all'); // Exibe todas as publicações inicialmente
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar publicações:', error);
+                    loadingMessage.textContent = 'Não foi possível carregar as publicações. Por favor, tente novamente mais tarde.';
+                    loadingMessage.classList.add('text-danger');
                 });
-            }
         });
     </script>
 </body>

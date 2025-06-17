@@ -1,0 +1,334 @@
+{% load static %} {# Adicione esta linha no topo do arquivo #}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Painel Administrativo{% endblock title %} - Profa. Rosiery Maia</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #9b9b9b;
+            --secondary-color: #f8edeb;
+            --accent-color: #ffa8be;
+            --text-color: #36617c;
+            --dark-text: #3e6cad;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: var(--dark-text) !important;
+        }
+
+        .navbar-brand {
+            color: var(--dark-text) !important;
+            font-weight: 600;
+        }
+
+        .admin-wrapper {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark-text);
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .sidebar h4 {
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .sidebar .nav-link {
+            color: white;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: var(--secondary-color);
+        }
+
+        .content-area h1 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            padding-top: 0.5rem;
+            margin-top: 3rem;
+            color: var(--dark-text);
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Estilos do Dashboard --- */
+        .dashboard-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%; /* Garante que os cards tenham a mesma altura */
+            display: flex; /* Para alinhar o conteúdo verticalmente */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-card .icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .dashboard-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            line-height: 1; /* Garante que não haja espaçamento extra */
+        }
+
+        .dashboard-card .label {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-top: 5px;
+        }
+
+        /* Estilo para a seção de Atividade Recente */
+        .section-title {
+            color: var(--dark-text);
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 70px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .admin-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+            .sidebar .nav {
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .sidebar .nav-link {
+                margin: 5px;
+            }
+            .content-area {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-4" href="{% url 'dashboard' %}">Painel Administrativo</a>
+            <div class="d-flex ms-auto">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}" style="color: var(--dark-text) !important;"> <i class="fas fa-home me-2"></i>Ver Site
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}" style="color: var(--dark-text) !important;"> <i class="fas fa-sign-out-alt me-2"></i>Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-wrapper">
+        <div class="sidebar">
+            <h4>Menu Admin</h4>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" data-content-url="dashboard" href="{% url 'dashboard' %}">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-content-url="gerenciar_publicacoes" href="#">
+                        <i class="fas fa-book-open"></i> Gerenciar Publicações
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-content-url="gerenciar_projetos" href="#">
+                        <i class="fas fa-project-diagram"></i> Gerenciar Projetos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-content-url="gerenciar_orientacoes" href="#">
+                        <i class="fas fa-users-cog"></i> Gerenciar Orientações
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-content-url="mensagens_contato" href="#">
+                        <i class="fas fa-envelope-open-text"></i> Mensagens (Contato)
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-content-url="configuracoes_site" href="#">
+                        <i class="fas fa-cogs"></i> Configurações do Site
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="content-area" id="admin-main-content">
+            {% block content %}
+            <!-- Conteúdo específico da página (dashboard ou outro) será carregado aqui -->
+            {% endblock content %}
+        </div>
+    </div>
+
+    <footer>
+        <div class="container py-3">
+            <p>&copy; 2025 Painel Administrativo Profa. Rosiery Maia.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            const adminMainContent = document.getElementById('admin-main-content');
+
+            // Função para carregar conteúdo dinamicamente
+            function loadContent(templateName) {
+                // Remove a classe 'active' de todos os links da sidebar
+                sidebarLinks.forEach(link => link.classList.remove('active'));
+
+                // Adiciona a classe 'active' ao link clicado (se o href for '#')
+                // Se o href for para o dashboard, o Django já cuida do 'active' inicial
+                sidebarLinks.forEach(link => {
+                    if (link.dataset.contentUrl === templateName) {
+                        link.classList.add('active');
+                    }
+                });
+
+                // Constrói a URL para a view que serve o conteúdo parcial
+                const url = `/admin/conteudo/${templateName}/`;
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erro ao carregar conteúdo: ' + response.statusText);
+                        }
+                        return response.text(); // Retorna o texto HTML
+                    })
+                    .then(html => {
+                        adminMainContent.innerHTML = html; // Insere o HTML no div principal
+                        // Após carregar o HTML, execute scripts que podem estar dentro dele (opcional e se necessário)
+                        // Esta é a parte mais crítica para scripts AJAX dentro dos HTMLs parciais.
+                        const scripts = adminMainContent.querySelectorAll('script');
+                        scripts.forEach(script => {
+                            const newScript = document.createElement('script');
+                            // Copia o conteúdo do script original
+                            newScript.textContent = script.textContent;
+                            // Adiciona o novo script ao DOM para que ele seja executado
+                            document.body.appendChild(newScript);
+                            // Remove o script após a execução para evitar duplicação em cliques subsequentes
+                            document.body.removeChild(newScript);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar o conteúdo administrativo:', error);
+                        adminMainContent.innerHTML = '<div class="alert alert-danger" role="alert">Não foi possível carregar o conteúdo. Por favor, tente novamente.</div>';
+                    });
+            }
+
+            // Adiciona listeners de clique aos links da sidebar para carregar conteúdo
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    const contentUrl = this.dataset.contentUrl;
+                    if (contentUrl && contentUrl !== 'dashboard') {
+                        event.preventDefault(); // Previne a navegação padrão
+                        loadContent(contentUrl);
+                    }
+                });
+            });
+
+            // Lógica para ativar o link da sidebar baseado na URL atual
+            // Adiciona um evento popstate para lidar com o botão de voltar/avançar do navegador
+            window.addEventListener('popstate', function(event) {
+                const path = window.location.pathname;
+                const match = path.match(/\/admin\/conteudo\/([a-zA-Z0-9_]+)\/?$/);
+                if (match) {
+                    const templateName = match[1];
+                    loadContent(templateName);
+                } else if (path === '/admin/dashboard/') {
+                    // Se voltar para o dashboard, apenas ativa o link do dashboard
+                    sidebarLinks.forEach(link => link.classList.remove('active'));
+                    document.querySelector('.sidebar .nav-link[data-content-url="dashboard"]').classList.add('active');
+                }
+            });
+
+            // Ativa o link da sidebar correspondente à página inicial (dashboard) ao carregar a página
+            const currentPath = window.location.pathname;
+            if (currentPath === '/admin/dashboard/') {
+                document.querySelector('.sidebar .nav-link[data-content-url="dashboard"]').classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

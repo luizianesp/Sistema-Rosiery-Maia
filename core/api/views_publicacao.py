@@ -8,20 +8,25 @@ router = Router(tags=["Publicacao"])
 
 @router.get("/", response=List[PublicacaoSchema])
 def list_publicacoes(request):
+    # Retorna todas as publicações. O PublicacaoSchema se encarregará da serialização dos campos.
     return Publicacao.objects.all()
 
 @router.get("/{id}", response=PublicacaoSchema)
 def get_publicacao(request, id: int):
+    # Retorna uma publicação específica.
     return get_object_or_404(Publicacao, id=id)
 
 @router.post("/", response=PublicacaoSchema)
 def create_publicacao(request, data: PublicacaoIn):
+    # Cria uma nova publicação com os dados fornecidos.
+    # Os campos de FileField (arquivo) e URLField (link) serão tratados aqui.
     return Publicacao.objects.create(**data.dict())
 
 @router.put("/{id}", response=PublicacaoSchema)
 def update_publicacao(request, id: int, data: PublicacaoIn):
     publicacao = get_object_or_404(Publicacao, id=id)
-    for attr, value in data.dict().items():
+    # Atualiza os campos da publicação.
+    for attr, value in data.dict(exclude_unset=True).items():
         setattr(publicacao, attr, value)
     publicacao.save()
     return publicacao

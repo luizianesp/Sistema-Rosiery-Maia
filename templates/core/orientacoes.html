@@ -152,7 +152,7 @@
             margin-bottom: 10px;
         }
 
-        .student-year {
+        .student-year { /* Este será o ano da orientação, se disponível */
             font-size: 0.8rem;
             background-color: var(--accent-color);
             color: var(--dark-text);
@@ -168,14 +168,15 @@
             border-radius: 20px;
             display: inline-block;
             margin-left: 10px;
+            text-transform: capitalize; /* Para formatar o texto do status */
         }
 
-        .status-ongoing {
+        .status-em-andamento { /* Renomeado para corresponder ao valor da DB/API */
             background-color: #a8dadc;
             color: var(--dark-text);
         }
 
-        .status-completed {
+        .status-concluido { /* Renomeado para corresponder ao valor da DB/API */
             background-color: #8dd9a0;
             color: #1d3a29;
         }
@@ -230,6 +231,11 @@
             color: var(--accent-color);
             margin-bottom: 1rem;
         }
+
+        #loading-message {
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -282,33 +288,34 @@
     <!-- Main Content -->
     <section class="section">
         <div class="container">
+            <!-- Estatísticas podem ser atualizadas via JS se você tiver um endpoint para isso, ou permanecer estáticas -->
             <div class="stats-container">
                 <div class="row">
                     <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                         <div class="stat-item">
                             <i class="fas fa-user-graduate stat-icon"></i>
-                            <div class="stat-number">12</div>
+                            <div class="stat-number" id="count-doutorado">0</div>
                             <div class="stat-label">Doutorandos</div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                         <div class="stat-item">
                             <i class="fas fa-graduation-cap stat-icon"></i>
-                            <div class="stat-number">18</div>
+                            <div class="stat-number" id="count-mestrado">0</div>
                             <div class="stat-label">Mestrandos</div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                         <div class="stat-item">
                             <i class="fas fa-book-reader stat-icon"></i>
-                            <div class="stat-number">34</div>
+                            <div class="stat-number" id="count-tcc">0</div>
                             <div class="stat-label">TCC's</div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
                         <div class="stat-item">
                             <i class="fas fa-flask stat-icon"></i>
-                            <div class="stat-number">27</div>
+                            <div class="stat-number" id="count-ic">0</div>
                             <div class="stat-label">Iniciação Científica</div>
                         </div>
                     </div>
@@ -317,232 +324,42 @@
 
             <ul class="nav nav-pills mb-4 justify-content-center" id="orientacoes-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active btn-custom me-2" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">Todos</button>
+                    <button class="nav-link active btn-custom me-2" id="all-tab" data-filter="all" data-bs-toggle="pill" data-bs-target="#all-pane" type="button" role="tab" aria-controls="all-pane" aria-selected="true">Todos</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link btn-outline-dark me-2" id="doutorado-tab" data-bs-toggle="pill" data-bs-target="#doutorado" type="button" role="tab" aria-controls="doutorado" aria-selected="false">Doutorado</button>
+                    <button class="nav-link btn-outline-dark me-2" id="doutorado-tab" data-filter="Doutorado" data-bs-toggle="pill" data-bs-target="#Doutorado-pane" type="button" role="tab" aria-controls="Doutorado-pane" aria-selected="false">Doutorado</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link btn-outline-dark me-2" id="mestrado-tab" data-bs-toggle="pill" data-bs-target="#mestrado" type="button" role="tab" aria-controls="mestrado" aria-selected="false">Mestrado</button>
+                    <button class="nav-link btn-outline-dark me-2" id="mestrado-tab" data-filter="Mestrado" data-bs-toggle="pill" data-bs-target="#Mestrado-pane" type="button" role="tab" aria-controls="Mestrado-pane" aria-selected="false">Mestrado</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link btn-outline-dark me-2" id="tcc-tab" data-bs-toggle="pill" data-bs-target="#tcc" type="button" role="tab" aria-controls="tcc" aria-selected="false">TCC</button>
+                    <button class="nav-link btn-outline-dark me-2" id="tcc-tab" data-filter="TCC" data-bs-toggle="pill" data-bs-target="#TCC-pane" type="button" role="tab" aria-controls="TCC-pane" aria-selected="false">TCC</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link btn-outline-dark" id="ic-tab" data-bs-toggle="pill" data-bs-target="#ic" type="button" role="tab" aria-controls="ic" aria-selected="false">Iniciação Científica</button>
+                    <button class="nav-link btn-outline-dark" id="ic-tab" data-filter="Iniciacao Cientifica" data-bs-toggle="pill" data-bs-target="#IniciacaoCientifica-pane" type="button" role="tab" aria-controls="IniciacaoCientifica-pane" aria-selected="false">Iniciação Científica</button>
                 </li>
             </ul>
 
             <div class="tab-content" id="orientacoesTabContent">
-                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-                    <!-- Doutorado -->
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Carlos Eduardo Santos</h5>
-                            <p class="student-program">Doutorado em Educação</p>
-                            <p class="student-title">Análise de Sistemas Educacionais Adaptativos: Um Estudo sobre Personalização da Aprendizagem baseada em Inteligência Artificial</p>
-                            <span class="student-year">2022-2026</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">O estudo investiga a eficácia de sistemas educacionais adaptativos baseados em IA para promover a personalização da aprendizagem em contextos universitários, avaliando o impacto no desempenho e na motivação dos estudantes.</p>
-                        </div>
-                    </div>
-
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Ana Luíza Ferreira</h5>
-                            <p class="student-program">Doutorado em Educação</p>
-                            <p class="student-title">Inclusão Digital e Acessibilidade: Perspectivas e Práticas para Educação Superior Inclusiva</p>
-                            <span class="student-year">2021-2025</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">A pesquisa analisa políticas e práticas de inclusão digital e acessibilidade no ensino superior, propondo diretrizes para implementação de ambientes virtuais acessíveis e inclusivos.</p>
-                        </div>
-                    </div>
-
-                    <!-- Mestrado -->
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Pedro Henrique Costa</h5>
-                            <p class="student-program">Mestrado em Tecnologia Educacional</p>
-                            <p class="student-title">Gamificação no Ensino de Programação: Impactos na Motivação e Aprendizagem de Estudantes de Computação</p>
-                            <span class="student-year">2023-2025</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">O projeto investiga como elementos de gamificação podem ser aplicados no ensino de programação para aumentar a motivação, o engajamento e a aprendizagem de estudantes de cursos de computação.</p>
-                        </div>
-                    </div>
-
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Mariana Silva Oliveira</h5>
-                            <p class="student-program">Mestrado em Educação</p>
-                            <p class="student-title">Avaliação Formativa Digital: Ferramentas e Estratégias para Feedback Contínuo no Ensino Superior</p>
-                            <span class="student-year">2022-2024</span>
-                            <span class="student-status status-completed">Concluído</span>
-                            <p class="mt-2">A pesquisa analisou diferentes ferramentas e estratégias de avaliação formativa digital, identificando práticas eficazes para fornecer feedback contínuo e personalizado aos estudantes universitários.</p>
-                        </div>
-                    </div>
-
-                    <!-- TCC -->
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Lucas Mendes Almeida</h5>
-                            <p class="student-program">TCC - Licenciatura em Pedagogia</p>
-                            <p class="student-title">Metodologias Ativas na Educação Infantil: Projetos de Aprendizagem Baseada em Problemas</p>
-                            <span class="student-year">2024</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">O trabalho investiga a aplicação de metodologias ativas, especialmente a Aprendizagem Baseada em Problemas, no contexto da educação infantil, analisando seus impactos no desenvolvimento cognitivo e socioemocional das crianças.</p>
-                        </div>
-                    </div>
-
-                    <!-- Iniciação Científica -->
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Juliana Pereira Santos</h5>
-                            <p class="student-program">Iniciação Científica - Psicologia</p>
-                            <p class="student-title">Saúde Mental e Desempenho Acadêmico: Impactos da Ansiedade e Estresse em Estudantes Universitários</p>
-                            <span class="student-year">2023-2024</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">O projeto investiga a relação entre saúde mental e desempenho acadêmico, analisando como a ansiedade e o estresse afetam o processo de aprendizagem de estudantes universitários.</p>
-                        </div>
-                    </div>
+                <div class="tab-pane fade show active" id="all-pane" role="tabpanel" aria-labelledby="all-tab">
+                    <p id="loading-message-all" class="text-center w-100">Carregando orientações...</p>
                 </div>
-
-                <div class="tab-pane fade" id="doutorado" role="tabpanel" aria-labelledby="doutorado-tab">
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Carlos Eduardo Santos</h5>
-                            <p class="student-program">Doutorado em Educação</p>
-                            <p class="student-title">Análise de Sistemas Educacionais Adaptativos: Um Estudo sobre Personalização da Aprendizagem baseada em Inteligência Artificial</p>
-                            <span class="student-year">2022-2026</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">O estudo investiga a eficácia de sistemas educacionais adaptativos baseados em IA para promover a personalização da aprendizagem em contextos universitários, avaliando o impacto no desempenho e na motivação dos estudantes.</p>
-                        </div>
-                    </div>
-
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Ana Luíza Ferreira</h5>
-                            <p class="student-program">Doutorado em Educação</p>
-                            <p class="student-title">Inclusão Digital e Acessibilidade: Perspectivas e Práticas para Educação Superior Inclusiva</p>
-                            <span class="student-year">2021-2025</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">A pesquisa analisa políticas e práticas de inclusão digital e acessibilidade no ensino superior, propondo diretrizes para implementação de ambientes virtuais acessíveis e inclusivos.</p>
-                        </div>
-                    </div>
-
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Rafael Gomes Almeida</h5>
-                            <p class="student-program">Doutorado em Educação</p>
-                            <p class="student-title">Competências Digitais Docentes: Um Framework para Formação Continuada em Contextos Híbridos</p>
-                            <span class="student-year">2020-2024</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">A pesquisa propõe um framework de desenvolvimento de competências digitais para docentes, considerando as demandas emergentes de contextos híbridos de ensino-aprendizagem.</p>
-                        </div>
-                    </div>
+                <div class="tab-pane fade" id="Doutorado-pane" role="tabpanel" aria-labelledby="doutorado-tab">
+                    <p id="loading-message-doutorado" class="text-center w-100">Carregando orientações de Doutorado...</p>
                 </div>
-
-                <div class="tab-pane fade" id="mestrado" role="tabpanel" aria-labelledby="mestrado-tab">
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Pedro Henrique Costa</h5>
-                            <p class="student-program">Mestrado em Tecnologia Educacional</p>
-                            <p class="student-title">Gamificação no Ensino de Programação: Impactos na Motivação e Aprendizagem de Estudantes de Computação</p>
-                            <span class="student-year">2023-2025</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">O projeto investiga como elementos de gamificação podem ser aplicados no ensino de programação para aumentar a motivação, o engajamento e a aprendizagem de estudantes de cursos de computação.</p>
-                        </div>
-                    </div>
-
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Mariana Silva Oliveira</h5>
-                            <p class="student-program">Mestrado em Educação</p>
-                            <p class="student-title">Avaliação Formativa Digital: Ferramentas e Estratégias para Feedback Contínuo no Ensino Superior</p>
-                            <span class="student-year">2022-2024</span>
-                            <span class="student-status status-completed">Concluído</span>
-                            <p class="mt-2">A pesquisa analisou diferentes ferramentas e estratégias de avaliação formativa digital, identificando práticas eficazes para fornecer feedback contínuo e personalizado aos estudantes universitários.</p>
-                        </div>
-                    </div>
-
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Camila Rodrigues Pereira</h5>
-                            <p class="student-program">Mestrado em Educação</p>
-                            <p class="student-title">Realidade Aumentada na Educação Básica: Possibilidades e Desafios para o Ensino de Ciências</p>
-                            <span class="student-year">2021-2023</span>
-                            <span class="student-status status-completed">Concluído</span>
-                            <p class="mt-2">A dissertação investigou a aplicação de tecnologias de realidade aumentada no ensino de ciências na educação básica, identificando possibilidades, desafios e impactos na aprendizagem dos estudantes.</p>
-                        </div>
-                    </div>
+                <div class="tab-pane fade" id="Mestrado-pane" role="tabpanel" aria-labelledby="mestrado-tab">
+                    <p id="loading-message-mestrado" class="text-center w-100">Carregando orientações de Mestrado...</p>
                 </div>
-
-                <div class="tab-pane fade" id="tcc" role="tabpanel" aria-labelledby="tcc-tab">
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Lucas Mendes Almeida</h5>
-                            <p class="student-program">TCC - Licenciatura em Pedagogia</p>
-                            <p class="student-title">Metodologias Ativas na Educação Infantil: Projetos de Aprendizagem Baseada em Problemas</p>
-                            <span class="student-year">2024</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">O trabalho investiga a aplicação de metodologias ativas, especialmente a Aprendizagem Baseada em Problemas, no contexto da educação infantil, analisando seus impactos no desenvolvimento cognitivo e socioemocional das crianças.</p>
-                        </div>
-                    </div>
-
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Fernanda Lima Carvalho</h5>
-                            <p class="student-program">TCC - Licenciatura em Pedagogia</p>
-                            <p class="student-title">Podcasts Educativos: Produção e Uso como Recurso Didático no Ensino Fundamental</p>
-                            <span class="student-year">2023</span>
-                            <span class="student-status status-completed">Concluído</span>
-                            <p class="mt-2">O trabalho explorou o potencial dos podcasts como recursos didáticos no ensino fundamental, analisando processos de produção, estratégias de implementação e impactos na aprendizagem.</p>
-                        </div>
-                    </div>
+                <div class="tab-pane fade" id="TCC-pane" role="tabpanel" aria-labelledby="tcc-tab">
+                    <p id="loading-message-tcc" class="text-center w-100">Carregando orientações de TCC...</p>
                 </div>
-
-                <div class="tab-pane fade" id="ic" role="tabpanel" aria-labelledby="ic-tab">
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluna" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Juliana Pereira Santos</h5>
-                            <p class="student-program">Iniciação Científica - Psicologia</p>
-                            <p class="student-title">Saúde Mental e Desempenho Acadêmico: Impactos da Ansiedade e Estresse em Estudantes Universitários</p>
-                            <span class="student-year">2023-2024</span>
-                            <span class="student-status status-ongoing">Em andamento</span>
-                            <p class="mt-2">O projeto investiga a relação entre saúde mental e desempenho acadêmico, analisando como a ansiedade e o estresse afetam o processo de aprendizagem de estudantes universitários.</p>
-                        </div>
-                    </div>
-
-                    <div class="student-item">
-                        <img src="/api/placeholder/150/150" alt="Foto de aluno" class="student-img">
-                        <div class="student-info">
-                            <h5 class="student-name">Gabriel Martins Silva</h5>
-                            <p class="student-program">Iniciação Científica - Ciência da Computação</p>
-                            <p class="student-title">Desenvolvimento de Aplicativo Mobile para Avaliação Formativa em Sala de Aula</p>
-                            <span class="student-year">2022-2023</span>
-                            <span class="student-status status-completed">Concluído</span>
-                            <p class="mt-2">O projeto envolveu o desenvolvimento e a validação de um aplicativo móvel para facilitar a implementação de estratégias de avaliação formativa em sala de aula, permitindo feedback imediato e personalizado.</p>
-                        </div>
-                    </div>
+                <div class="tab-pane fade" id="IniciacaoCientifica-pane" role="tabpanel" aria-labelledby="ic-tab">
+                    <p id="loading-message-ic" class="text-center w-100">Carregando orientações de Iniciação Científica...</p>
                 </div>
             </div>
 
             <div class="text-center mt-5">
-                <a href="#" class="btn btn-custom">Ver Todos os Orientandos</a>
+                <a href="#" class="btn btn-custom" style="display: none;">Ver Todos os Orientandos</a>
             </div>
         </div>
     </section>
@@ -572,25 +389,158 @@
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
-        // Script para alternar entre as abas
         document.addEventListener('DOMContentLoaded', function() {
-            const filterButtons = document.querySelectorAll('.nav-pills button');
-            
-            filterButtons.forEach(button => {
+            const orientationsApiUrl = '/api/orientacoes/';
+            let allOrientations = [];
+
+            // Mapeia o data-filter para o ID do tab-pane correspondente
+            const tabContainers = {
+                'all': document.getElementById('all-pane'),
+                'Doutorado': document.getElementById('Doutorado-pane'),
+                'Mestrado': document.getElementById('Mestrado-pane'),
+                'TCC': document.getElementById('TCC-pane'),
+                'Iniciacao Cientifica': document.getElementById('IniciacaoCientifica-pane')
+            };
+
+            const countElements = {
+                'Doutorado': document.getElementById('count-doutorado'),
+                'Mestrado': document.getElementById('count-mestrado'),
+                'TCC': document.getElementById('count-tcc'),
+                'Iniciacao Cientifica': document.getElementById('count-ic')
+            };
+
+            function renderOrientations(orientationsToDisplay, targetContainerKey) {
+                const container = tabContainers[targetContainerKey];
+                if (!container) {
+                    console.error('Container de aba não encontrado para a chave:', targetContainerKey);
+                    return;
+                }
+                container.innerHTML = ''; // Limpa o conteúdo atual
+
+                if (orientationsToDisplay.length === 0) {
+                    container.innerHTML = '<p class="text-center w-100">Nenhuma orientação encontrada para esta categoria.</p>';
+                    return;
+                }
+
+                orientationsToDisplay.forEach(orientation => {
+                    const statusClass = orientation.status.toLowerCase().replace(/\s/g, '-');
+                    const imageUrl = orientation.imagem || 'https://placehold.co/150x150/CCCCCC/FFFFFF?text=Sem+Foto';
+
+                    const orientationHtml = `
+                        <div class="student-item">
+                            <img src="${imageUrl}" alt="Foto de aluno" class="student-img" onerror="this.onerror=null;this.src='https://placehold.co/150x150/CCCCCC/FFFFFF?text=Sem+Foto';">
+                            <div class="student-info">
+                                <h5 class="student-name">${orientation.aluno}</h5>
+                                <p class="student-program">${orientation.categoria}</p>
+                                <p class="student-title">${orientation.trabalho}</p>
+                                <span class="student-status status-${statusClass}">${orientation.status}</span>
+                                <p class="mt-2">${orientation.descricao || ''}</p>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += orientationHtml;
+                });
+            }
+
+            function filterAndRenderOrientations(filterValue) {
+                console.log('--- Início da Filtragem ---');
+                console.log('Valor do filtro (data-filter):', `"${filterValue}"`);
+
+                // Oculta todas as mensagens de carregamento para os tab-panes (que agora são os containers)
+                Object.values(tabContainers).forEach(container => {
+                    const loadingMsg = container.querySelector('[id^="loading-message"]');
+                    if (loadingMsg) loadingMsg.style.display = 'none';
+                });
+
+
+                let filtered = [];
+                if (filterValue === 'all') {
+                    filtered = allOrientations;
+                    console.log('Exibindo todas as orientações.');
+                    renderOrientations(filtered, 'all');
+                } else {
+                    filtered = allOrientations.filter(o => {
+                        const orientationCategory = String(o.categoria).trim().toLowerCase();
+                        const filterCategory = String(filterValue).trim().toLowerCase();
+
+                        console.log(`Comparando: Categoria da Orientação na API: "${orientationCategory}" === Valor do Botão de Filtro: "${filterCategory}"?`);
+                        const match = orientationCategory === filterCategory;
+                        console.log(`Resultado da comparação para ${o.aluno} (${o.categoria}): ${match}`);
+                        return match;
+                    });
+                    console.log(`Orientações filtradas para "${filterValue}":`, filtered);
+                    renderOrientations(filtered, filterValue);
+                }
+                console.log('--- Fim da Filtragem ---');
+            }
+
+            // Adiciona listeners para os botões de filtro (abas)
+            document.querySelectorAll('.nav-pills button').forEach(button => {
                 button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => {
+                    // Lógica para ativar/desativar classes de estilo nos botões
+                    document.querySelectorAll('.nav-pills button').forEach(btn => {
                         btn.classList.remove('active', 'btn-custom');
                         btn.classList.add('btn-outline-dark');
                     });
-                    
-                    // Add active class to clicked button
                     this.classList.add('active', 'btn-custom');
                     this.classList.remove('btn-outline-dark');
+
+                    const filterValue = this.getAttribute('data-filter');
+                    // Chama a função de filtragem e renderização
+                    filterAndRenderOrientations(filterValue);
                 });
             });
+
+            // Faz a requisição à API para carregar as orientações
+            fetch(orientationsApiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar orientações: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    allOrientations = data;
+                    console.log('--- Dados Completos da API Carregados (Array allOrientations) ---');
+                    console.log(allOrientations);
+                    console.log('--- Detalhes das Categorias de cada Orientação (pós-API) ---');
+                    allOrientations.forEach(o => console.log(`Orientação do(a) ${o.aluno}: Categoria -> "${o.categoria}"`));
+                    console.log('--------------------------------------------------');
+
+                    const counts = { 'Doutorado': 0, 'Mestrado': 0, 'TCC': 0, 'Iniciacao Cientifica': 0 };
+                    allOrientations.forEach(o => {
+                        const categoryKey = String(o.categoria).trim();
+                        if (counts.hasOwnProperty(categoryKey)) {
+                            counts[categoryKey]++;
+                        } else {
+                            console.warn(`[Contador] Categoria desconhecida encontrada: "${categoryKey}" para o(a) aluno(a) ${o.aluno}. Verifique o data-filter e os dados da API.`);
+                        }
+                    });
+                    Object.keys(counts).forEach(cat => {
+                        if (countElements[cat]) {
+                            countElements[cat].textContent = counts[cat];
+                        }
+                    });
+
+                    // Renderiza a aba 'Todos' inicialmente
+                    filterAndRenderOrientations('all');
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar orientações:', error);
+                    // Exibe mensagem de erro para o usuário
+                    Object.values(tabContainers).forEach(container => {
+                        const loadingMsg = container.querySelector('[id^="loading-message"]');
+                        if (loadingMsg) {
+                            loadingMsg.textContent = 'Não foi possível carregar as orientações. Tente novamente mais tarde.';
+                            loadingMsg.classList.add('text-danger');
+                            loadingMsg.style.display = 'block';
+                        } else {
+                            container.innerHTML = '<p class="text-center w-100 text-danger">Não foi possível carregar as orientações. Tente novamente mais tarde.</p>';
+                        }
+                    });
+                });
         });
     </script>
 </body>

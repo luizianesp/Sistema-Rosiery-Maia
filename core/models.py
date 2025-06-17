@@ -40,15 +40,42 @@ class Projeto(models.Model):
         return self.titulo
 
 class Publicacao(models.Model):
+    CATEGORIA_CHOICES = [
+        ('Artigo', 'Artigo'),
+        ('Livro', 'Livro'),
+        ('Capitulo', 'Capitulo'),
+        ('Conferencia', 'Conferencia'),
+    ]
+    categoria = models.CharField(max_length=20, choices=CATEGORIA_CHOICES)
     titulo = models.CharField(max_length=200)
+    autores = models.CharField(max_length=100)
+    ano = models.IntegerField()
+    publicado_no = models.CharField(max_length=100)
+    descricao = models.TextField(blank=True, null=True)
+    arquivo = models.FileField(upload_to='publicacao/', blank=True, null=True)
     link = models.URLField()
 
     def __str__(self):
         return self.titulo
 
 class Orientacao(models.Model):
+    STATUS_CHOICES = [
+        ('em Andamento', 'em Andamento'),
+        ('Concluido', 'Concluido'),
+    ]
+
+    CATEGORIA_CHOICES = [
+        ('Doutorado', 'Doutorado'),
+        ('Mestrado', 'Mestrado'),
+        ('TCC', 'TCC'),
+        ('Iniciacao Cientifica', 'Iniciacao Cientifica'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     aluno = models.CharField(max_length=100)
+    categoria = models.CharField(max_length=20, choices=CATEGORIA_CHOICES)
     trabalho = models.CharField(max_length=200)
+    descricao = models.TextField(blank=True, null=True)
+    imagem = models.ImageField(upload_to='orientacao/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.aluno} - {self.trabalho}"
@@ -58,7 +85,8 @@ class MensagemContato(models.Model):
     email = models.EmailField()
     assunto = models.CharField(max_length=100)
     mensagem = models.TextField()
-    # enviada_em = models.DateTimeField(auto_now_add=True)
+    noticias = models.BooleanField(default=False)
+    # enviada_em = models.DateTimeField(auto_now_add=True, default=)
 
 
     def __str__(self):

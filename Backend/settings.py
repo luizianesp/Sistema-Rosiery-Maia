@@ -56,7 +56,7 @@ ROOT_URLCONF = 'Backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -143,3 +143,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# URL para onde o usuário é redirecionado após um login bem-sucedido
+LOGIN_REDIRECT_URL = '/admin/dashboard/'  # Redireciona para a home page após o login
+
+# URL para a página de login. Django irá redirecionar para cá se o usuário tentar
+# acessar uma view que requer autenticação e não estiver logado.
+LOGIN_URL = '/login/' # O caminho da sua view de login personalizada
+
+# URL para onde o usuário é redirecionado após o logout
+LOGOUT_REDIRECT_URL = '/' # Redireciona para a home page após o logout
