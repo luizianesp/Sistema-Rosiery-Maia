@@ -22,7 +22,7 @@ from core.api_urls import api
 from django.conf import settings
 from django.conf.urls.static import static
 
-from core.views import user_logout, user_login, admin_panel_content, admin_dashboard
+from core.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,7 +38,11 @@ urlpatterns = [
 
     # URLs para carregar conteúdo dinâmico no painel administrativo
     # Estes mapearão para as partes de template que criaremos
-    path('admin/conteudo/<str:template_name>/', admin_panel_content, name='admin_content'),
+    path('admin_publicacoes/', admin_publicacoes, name='admin_publicacoes'),
+    path('admin_projetos/', admin_projetos, name='admin_projetos'),
+    path('admin_orientacoes/', admin_orientacoes, name='admin_orientacoes'),
+    path('admin_mensagens/', admin_mensagens, name='admin_mensagens'),
+    path('admin_configuracoes/', admin_configuracoes, name='admin_configuracoes'),
 
 ]
 

@@ -75,13 +75,30 @@ def user_logout(request):
     messages.info(request, 'Você foi desconectado(a).')
     return redirect('login')  # Redireciona para a URL definida em LOGOUT_REDIRECT_URL
 
-@login_required # Protege esta view, só usuários logados podem acessá-la
+@login_required
 def admin_dashboard(request):
-    # Esta view renderizará o template do dashboard
     return render(request, 'core/dashboard.html')
 
+# === NOVAS VIEWS ESPECÍFICAS PARA CADA GERENCIAMENTO ===
 @login_required
-def admin_panel_content(request, template_name):
-    # Esta view genérica renderizará as partes de template para o conteúdo dinâmico
-    # O template_name virá da URL, ex: '_gerenciar_publicacoes.html'
-    return render(request, f'core/{template_name}.html')
+def admin_publicacoes(request):
+    return render(request, 'core/gerenciar_publicacoes.html')
+
+@login_required
+def admin_projetos(request):
+    return render(request, 'core/gerenciar_projetos.html')
+
+@login_required
+def admin_orientacoes(request):
+    return render(request, 'core/gerenciar_orientacoes.html')
+
+@login_required
+def admin_mensagens(request):
+    # Pode ser útil passar as mensagens aqui se você não for usar uma API Ninja para listar
+    # mensagens diretamente no frontend. Se usar API, apenas renderize o template.
+    # Exemplo: messages = MensagemContato.objects.all()
+    return render(request, 'core/mensagens_contato.html') # , {'messages': messages}
+
+@login_required
+def admin_configuracoes(request):
+    return render(request, 'core/configuracoes_site.html')

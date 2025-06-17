@@ -1,11 +1,16 @@
-from ninja import Schema
+from ninja import Schema, File # Importe File para usar UploadFile
 from typing import List, Optional
-from datetime import datetime # Importar datetime para o campo enviada_em
+from datetime import datetime
+
+from ninja.files import UploadedFile
+
 
 class AreaPesquisaSchema(Schema):
     id: int
     nome: str
     descricao: Optional[str]
+    # Certifique-se de que 'topico' está definido como uma lista de TopicosSchema
+    topico: List['TopicosSchema'] = []
 
     class Config:
         from_attributes = True
@@ -22,7 +27,6 @@ class TopicosSchema(Schema):
 
     class Config:
         from_attributes = True
-
 
 class ObjetivosSchema(Schema):
     id: int
@@ -57,19 +61,20 @@ class ProjetoIn(Schema):
 
 class PublicacaoSchema(Schema):
     id: int
-    categoria: str # Novo campo
+    categoria: str
     titulo: str
-    autores: str # Novo campo
-    ano: int # Novo campo
-    publicado_no: str # Novo campo
-    descricao: Optional[str] # Novo campo, opcional
-    arquivo: Optional[str] # Novo campo para FileField, opcional
+    autores: str
+    ano: int
+    publicado_no: str
+    descricao: Optional[str]
+    arquivo: Optional[str] # Para saída, ainda será uma URL (string)
     link: str
 
     class Config:
         from_attributes = True
 
 
+# Para a entrada (POST/PUT), o 'arquivo' deve ser UploadedFile
 class PublicacaoIn(Schema):
     categoria: str
     titulo: str
@@ -77,9 +82,8 @@ class PublicacaoIn(Schema):
     ano: int
     publicado_no: str
     descricao: Optional[str]
-    arquivo: Optional[str]
+    arquivo: Optional[File[UploadedFile]] = None # <--- MUDADO DE VOLTA PARA UploadedFile
     link: str
-
 
 class OrientacaoSchema(Schema):
     id: int

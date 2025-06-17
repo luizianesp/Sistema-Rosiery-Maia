@@ -1,4 +1,4 @@
-{% load static %} {# Adicione esta linha no topo do arquivo #}
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -98,7 +98,7 @@
             margin-bottom: 0.5rem;
         }
 
-        /* --- Estilos do Dashboard --- */
+        /* --- Estilos do Dashboard (mantidos aqui) --- */
         .dashboard-card {
             background-color: white;
             border-radius: 15px;
@@ -106,8 +106,8 @@
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%; /* Garante que os cards tenham a mesma altura */
-            display: flex; /* Para alinhar o conteúdo verticalmente */
+            height: 100%;
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -128,7 +128,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--dark-text);
-            line-height: 1; /* Garante que não haja espaçamento extra */
+            line-height: 1;
         }
 
         .dashboard-card .label {
@@ -137,7 +137,7 @@
             margin-top: 5px;
         }
 
-        /* Estilo para a seção de Atividade Recente */
+        /* Estilo para a seção de Atividade Recente (e outros títulos de seção) */
         .section-title {
             color: var(--dark-text);
             position: relative;
@@ -154,6 +154,31 @@
             height: 3px;
             background-color: var(--accent-color);
         }
+
+        /* --- Estilos para tabelas de gerenciamento (adicionados para consistência) --- */
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            margin-top: 15px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .table .btn {
+            white-space: nowrap; /* Evita que os botões quebrem linha */
+        }
+        .invalid-feedback {
+            display: block; /* Para mostrar erros de validação abaixo dos campos */
+        }
+        /* Estilos para feedback de formulário */
+        .alert-success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .alert-danger { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        .alert-info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
+
 
         @media (max-width: 768px) {
             .admin-wrapper {
@@ -202,32 +227,32 @@
             <h4>Menu Admin</h4>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" data-content-url="dashboard" href="{% url 'dashboard' %}">
+                    <a class="nav-link active" data-content-key="dashboard" href="{% url 'dashboard' %}">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-content-url="gerenciar_publicacoes" href="#">
+                    <a class="nav-link" data-content-key="publicacoes" href="{% url 'admin_publicacoes' %}">
                         <i class="fas fa-book-open"></i> Gerenciar Publicações
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-content-url="gerenciar_projetos" href="#">
+                    <a class="nav-link" data-content-key="projetos" href="{% url 'admin_projetos' %}">
                         <i class="fas fa-project-diagram"></i> Gerenciar Projetos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-content-url="gerenciar_orientacoes" href="#">
+                    <a class="nav-link" data-content-key="orientacoes" href="{% url 'admin_orientacoes' %}">
                         <i class="fas fa-users-cog"></i> Gerenciar Orientações
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-content-url="mensagens_contato" href="#">
+                    <a class="nav-link" data-content-key="mensagens" href="{% url 'admin_mensagens' %}">
                         <i class="fas fa-envelope-open-text"></i> Mensagens (Contato)
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-content-url="configuracoes_site" href="#">
+                    <a class="nav-link" data-content-key="configuracoes" href="{% url 'admin_configuracoes' %}">
                         <i class="fas fa-cogs"></i> Configurações do Site
                     </a>
                 </li>
@@ -253,82 +278,113 @@
             const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
             const adminMainContent = document.getElementById('admin-main-content');
 
+            // Mapeia data-content-key para as URLs Django reais
+            const adminContentUrls = {
+                'publicacoes': '{% url "admin_publicacoes" %}',
+                'projetos': '{% url "admin_projetos" %}',
+                'orientacoes': '{% url "admin_orientacoes" %}',
+                'mensagens': '{% url "admin_mensagens" %}',
+                'configuracoes': '{% url "admin_configuracoes" %}',
+            };
+
             // Função para carregar conteúdo dinamicamente
-            function loadContent(templateName) {
+            function loadContent(contentKey) {
+                console.log(`[base_admin.js] Carregando conteúdo para: ${contentKey}`);
+
                 // Remove a classe 'active' de todos os links da sidebar
                 sidebarLinks.forEach(link => link.classList.remove('active'));
 
-                // Adiciona a classe 'active' ao link clicado (se o href for '#')
-                // Se o href for para o dashboard, o Django já cuida do 'active' inicial
+                // Adiciona a classe 'active' ao link clicado
                 sidebarLinks.forEach(link => {
-                    if (link.dataset.contentUrl === templateName) {
+                    if (link.dataset.contentKey === contentKey) {
                         link.classList.add('active');
                     }
                 });
 
-                // Constrói a URL para a view que serve o conteúdo parcial
-                const url = `/admin/conteudo/${templateName}/`;
+                const urlToFetch = adminContentUrls[contentKey];
+                if (!urlToFetch) {
+                    console.error(`[base_admin.js] URL para a chave "${contentKey}" não encontrada no mapeamento.`);
+                    adminMainContent.innerHTML = '<div class="alert alert-danger" role="alert">Conteúdo não configurado.</div>';
+                    return;
+                }
+                console.log(`[base_admin.js] URL de fetch: ${urlToFetch}`);
 
-                fetch(url)
+                fetch(urlToFetch)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Erro ao carregar conteúdo: ' + response.statusText);
                         }
-                        return response.text(); // Retorna o texto HTML
+                        return response.text();
                     })
                     .then(html => {
-                        adminMainContent.innerHTML = html; // Insere o HTML no div principal
-                        // Após carregar o HTML, execute scripts que podem estar dentro dele (opcional e se necessário)
-                        // Esta é a parte mais crítica para scripts AJAX dentro dos HTMLs parciais.
+                        console.log(`[base_admin.js] Conteúdo HTML recebido para "${contentKey}".`);
+                        adminMainContent.innerHTML = html;
+
+                        // Executa scripts dentro do HTML injetado
                         const scripts = adminMainContent.querySelectorAll('script');
+                        console.log(`[base_admin.js] Encontrados ${scripts.length} scripts para re-execução.`);
                         scripts.forEach(script => {
                             const newScript = document.createElement('script');
-                            // Copia o conteúdo do script original
                             newScript.textContent = script.textContent;
-                            // Adiciona o novo script ao DOM para que ele seja executado
                             document.body.appendChild(newScript);
-                            // Remove o script após a execução para evitar duplicação em cliques subsequentes
                             document.body.removeChild(newScript);
+                            console.log('[base_admin.js] Script injetado e executado.');
                         });
                     })
                     .catch(error => {
-                        console.error('Erro ao carregar o conteúdo administrativo:', error);
-                        adminMainContent.innerHTML = '<div class="alert alert-danger" role="alert">Não foi possível carregar o conteúdo. Por favor, tente novamente.</div>';
+                        console.error('[base_admin.js] Erro ao carregar o conteúdo administrativo:', error);
+                        adminMainContent.innerHTML = `<div class="alert alert-danger" role="alert">Não foi possível carregar o conteúdo: ${error.message}. Por favor, tente novamente.</div>`;
                     });
             }
 
             // Adiciona listeners de clique aos links da sidebar para carregar conteúdo
             sidebarLinks.forEach(link => {
                 link.addEventListener('click', function(event) {
-                    const contentUrl = this.dataset.contentUrl;
-                    if (contentUrl && contentUrl !== 'dashboard') {
-                        event.preventDefault(); // Previne a navegação padrão
-                        loadContent(contentUrl);
+                    const contentKey = this.dataset.contentKey; // Pega a chave do data-content-key
+                    if (contentKey && contentKey !== 'dashboard') {
+                        event.preventDefault();
+                        loadContent(contentKey);
+                        // Opcional: Atualizar a URL na barra de endereços (para popstate funcionar)
+                        // window.history.pushState({contentKey: contentKey}, '', adminContentUrls[contentKey]);
                     }
                 });
             });
 
-            // Lógica para ativar o link da sidebar baseado na URL atual
-            // Adiciona um evento popstate para lidar com o botão de voltar/avançar do navegador
+            // Lógica para lidar com o botão de voltar/avançar do navegador e carregamento inicial
             window.addEventListener('popstate', function(event) {
                 const path = window.location.pathname;
-                const match = path.match(/\/admin\/conteudo\/([a-zA-Z0-9_]+)\/?$/);
-                if (match) {
-                    const templateName = match[1];
-                    loadContent(templateName);
-                } else if (path === '/admin/dashboard/') {
-                    // Se voltar para o dashboard, apenas ativa o link do dashboard
+                const foundKey = Object.keys(adminContentUrls).find(key => adminContentUrls[key] === path);
+
+                if (foundKey) {
+                    loadContent(foundKey);
+                } else if (path === '{% url "dashboard" %}') { // Usar url tag para dashboard
                     sidebarLinks.forEach(link => link.classList.remove('active'));
-                    document.querySelector('.sidebar .nav-link[data-content-url="dashboard"]').classList.add('active');
+                    document.querySelector('.sidebar .nav-link[data-content-key="dashboard"]').classList.add('active');
+                    // Se a página atual é o dashboard e ela não foi carregada via AJAX,
+                    // precisamos renderizar seu conteúdo diretamente se ele for um partial.
+                    // No nosso caso, dashboard.html é um full template, então não precisa de loadContent.
                 }
             });
 
             // Ativa o link da sidebar correspondente à página inicial (dashboard) ao carregar a página
+            // E tenta carregar o conteúdo se a URL já for de uma página de gerenciamento
             const currentPath = window.location.pathname;
-            if (currentPath === '/admin/dashboard/') {
-                document.querySelector('.sidebar .nav-link[data-content-url="dashboard"]').classList.add('active');
+            let initialLoadKey = 'dashboard'; // Padrão é o dashboard
+
+            // Verifica se a URL atual corresponde a alguma das URLs de gerenciamento
+            for (const key in adminContentUrls) {
+                if (adminContentUrls.hasOwnProperty(key) && adminContentUrls[key] === currentPath) {
+                    initialLoadKey = key;
+                    break;
+                }
+            }
+
+            if (initialLoadKey === 'dashboard') {
+                // Ativa o link do dashboard se estamos no dashboard
+                document.querySelector('.sidebar .nav-link[data-content-key="dashboard"]').classList.add('active');
+            } else {
+                // Se estamos em uma URL de gerenciamento específica, carrega o conteúdo via AJAX
+                loadContent(initialLoadKey);
             }
         });
     </script>
-</body>
-</html>
