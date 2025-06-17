@@ -40,11 +40,11 @@ class ProjetoSchema(Schema):
     id: int
     titulo: str
     descricao: str
-    imagem: Optional[str]
+    imagem: Optional[str] # Para saída, é a URL da imagem
     categoria: str
     financiamento: Optional[str]
     equipe: Optional[str]
-    objetivos: List[ObjetivosSchema] = []
+    objetivos: List[ObjetivosSchema] = [] # Lista de objetos ObjetivosSchema
 
     class Config:
         from_attributes = True
@@ -53,10 +53,15 @@ class ProjetoSchema(Schema):
 class ProjetoIn(Schema):
     titulo: str
     descricao: str
-    imagem: Optional[str]
+    # Para entrada, a imagem será um arquivo UploadedFile, não uma string de URL.
+    # Usaremos Optional[File[UploadedFile]] para aceitar o upload de arquivo.
+    imagem: Optional[File[UploadedFile]] = None
     categoria: str
     financiamento: Optional[str]
     equipe: Optional[str]
+    # Se você precisar associar objetivos diretamente via este formulário,
+    # precisaria de um campo como objetivos_ids: List[int] = [] e lógica adicional.
+    # Por enquanto, focaremos nos campos diretos e na imagem.
 
 
 class PublicacaoSchema(Schema):

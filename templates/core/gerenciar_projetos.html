@@ -1,0 +1,378 @@
+{% block content %}
+<div class="content-area">
+    <h1>Gerenciar Projetos</h1>
+    <p class="lead">Aqui você pode visualizar, adicionar, editar ou remover projetos do site.</p>
+
+    <!-- Botões de Ação -->
+    <div class="mb-3">
+        <button type="button" class="btn btn-primary me-2" style="background-color: var(--accent-color); border-color: var(--accent-color); color: white;" id="addProjectBtn">
+            <i class="fas fa-plus-circle me-2"></i>Adicionar Novo Projeto
+        </button>
+    </div>
+
+    <!-- Formulário de Adicionar/Editar Projeto (Inicialmente oculto) -->
+    <div class="card p-4 shadow-sm mb-4" id="projectFormCard" style="display: none;">
+        <h5><span id="formTitle">Adicionar</span> Projeto</h5>
+        <form id="projectForm" enctype="multipart/form-data"> {# IMPORTANTE: Adicionado enctype #}
+            {% csrf_token %} {# CSRF token é necessário para POST/PUT/DELETE #}
+            <input type="hidden" id="projectId"> {# Para armazenar o ID ao editar #}
+
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Título</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" required>
+            </div>
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="imagem" class="form-label">Imagem do Projeto</label>
+                <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*"> {# type="file" para imagem #}
+                <small class="form-text text-muted" id="currentImageDisplay"></small> {# Para exibir a imagem atual #}
+            </div>
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoria</label>
+                <select class="form-select" id="categoria" name="categoria" required>
+                    <option value="">Selecione a Categoria</option>
+                    <option value="Pesquisa">Pesquisa</option>
+                    <option value="Ensino">Ensino</option>
+                    <option value="Extensao">Extensão</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="financiamento" class="form-label">Financiamento (Opcional)</label>
+                <input type="text" class="form-control" id="financiamento" name="financiamento">
+            </div>
+            <div class="mb-3">
+                <label for="equipe" class="form-label">Equipe (Opcional)</label>
+                <textarea class="form-control" id="equipe" name="equipe" rows="2"></textarea>
+            </div>
+
+            {# Campo para seleção de Objetivos - Assumindo que você tem uma API para listá-los #}
+            {# Se a complexidade de gerenciar M2M for muito alta para o CRUD inline, podemos simplificar #}
+            {# Por agora, não incluiremos o gerenciamento de M2M de Objetivos diretamente no formulário #}
+            {# Se precisar, me avise e podemos adicionar a lógica para carregar e associar/desassociar Objetivos #}
+
+            <button type="submit" class="btn btn-primary" style="background-color: var(--accent-color); border-color: var(--accent-color); color: white;">
+                <i class="fas fa-save me-2"></i>Salvar Projeto
+            </button>
+            <button type="button" class="btn btn-secondary ms-2" id="cancelFormBtn">
+                Cancelar
+            </button>
+        </form>
+        <div id="form-feedback" class="mt-3" style="display: none;"></div>
+    </div>
+
+    <!-- Tabela de Projetos -->
+    <div class="card p-3 shadow-sm">
+        <h5>Projetos Atuais</h5>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Categoria</th>
+                        <th>Financiamento</th>
+                        <th>Imagem</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="projectsTableBody">
+                    <!-- Projetos serão carregados dinamicamente aqui -->
+                    <tr><td colspan="6" class="text-center">Carregando projetos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="table-feedback" class="mt-3" style="display: none;"></div>
+    </div>
+</div>
+
+<script>
+    // Script específico para Gerenciar Projetos
+    console.log('[Script Projetos] Script iniciado.');
+
+    const projectsApiUrl = '/api/projetos/';
+    const projectsTableBody = document.getElementById('projectsTableBody');
+    const addProjectBtn = document.getElementById('addProjectBtn');
+    const projectFormCard = document.getElementById('projectFormCard');
+    const projectForm = document.getElementById('projectForm');
+    const formTitle = document.getElementById('formTitle');
+    const projectIdInput = document.getElementById('projectId');
+    const cancelFormBtn = document.getElementById('cancelFormBtn');
+    const formFeedback = document.getElementById('form-feedback');
+    const tableFeedback = document.getElementById('table-feedback');
+
+    // Referências aos campos do formulário
+    const tituloInput = document.getElementById('titulo');
+    const descricaoInput = document.getElementById('descricao');
+    const imagemInput = document.getElementById('imagem'); // Input do tipo file para imagem
+    const currentImageDisplay = document.getElementById('currentImageDisplay'); // Para exibir a imagem atual
+    const categoriaSelect = document.getElementById('categoria');
+    const financiamentoInput = document.getElementById('financiamento');
+    const equipeInput = document.getElementById('equipe');
+
+    let currentEditId = null;
+
+    // --- Funções de Utilitário ---
+    function getCsrfToken() {
+        const csrfElement = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (csrfElement) {
+            return csrfElement.value;
+        }
+        console.error('[CSRF Token] Elemento csrfmiddlewaretoken não encontrado.');
+        return '';
+    }
+
+    function showFeedback(element, message, type = 'info') {
+        element.textContent = message;
+        element.className = `alert alert-${type}`;
+        element.style.display = 'block';
+        setTimeout(() => {
+            if (element) element.style.display = 'none';
+        }, 5000);
+    }
+
+    function clearForm() {
+        console.log('[Formulário Projeto] Limpando formulário.');
+        projectForm.reset();
+        projectIdInput.value = '';
+        currentEditId = null;
+        formTitle.textContent = 'Adicionar';
+        projectFormCard.style.display = 'none';
+        formFeedback.style.display = 'none';
+        tableFeedback.style.display = 'none';
+        currentImageDisplay.innerHTML = ''; // Limpa o display da imagem
+        imagemInput.value = ''; // Limpa o input file
+    }
+
+    // --- Funções de Renderização e Carga de Dados ---
+    async function fetchProjects() {
+        console.log('[API Projetos] Iniciando busca de projetos...');
+        projectsTableBody.innerHTML = '<tr><td colspan="6" class="text-center">Carregando projetos...</td></tr>';
+        try {
+            const response = await fetch(projectsApiUrl);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Erro HTTP: ${response.status} - ${errorText}`);
+            }
+            const projects = await response.json();
+            console.log('[API Projetos] Projetos carregados:', projects);
+            renderProjectsTable(projects);
+        } catch (error) {
+            console.error('[API Projetos Erro] Erro ao buscar projetos:', error);
+            projectsTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Falha ao carregar projetos. Verifique o console para mais detalhes.</td></tr>';
+            showFeedback(tableFeedback, `Erro ao carregar projetos: ${error.message}`, 'danger');
+        }
+    }
+
+    function renderProjectsTable(projects) {
+        console.log('[Renderização Projetos] Renderizando tabela de projetos.');
+        projectsTableBody.innerHTML = '';
+        if (projects.length === 0) {
+            projectsTableBody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhum projeto encontrado.</td></tr>';
+            return;
+        }
+
+        projects.forEach(project => {
+            // Caminho da imagem, com placeholder se não houver
+            const imageUrl = project.imagem ? project.imagem : 'https://placehold.co/60x40/CCCCCC/FFFFFF?text=Sem+Img';
+            const imageHtml = `<img src="${imageUrl}" alt="Imagem do Projeto" style="width:60px; height:40px; object-fit:cover; border-radius:5px;">`;
+
+            const row = projectsTableBody.insertRow();
+            row.innerHTML = `
+                <td>${project.id}</td>
+                <td>${project.titulo}</td>
+                <td>${project.categoria}</td>
+                <td>${project.financiamento || 'N/A'}</td>
+                <td>${imageHtml}</td>
+                <td>
+                    <button type="button" class="btn btn-info btn-sm me-2 edit-btn" data-id="${project.id}">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${project.id}">
+                        <i class="fas fa-trash"></i> Remover
+                    </button>
+                </td>
+            `;
+        });
+
+        document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', handleEdit));
+        document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
+        console.log('[Renderização Projetos] Listeners de botões adicionados.');
+    }
+
+    // --- Handlers de Eventos do Formulário e Botões ---
+    if (addProjectBtn) {
+        addProjectBtn.addEventListener('click', () => {
+            console.log('[Botão Adicionar Projeto] Clicado.');
+            clearForm();
+            projectFormCard.style.display = 'block';
+            tituloInput.focus();
+        });
+    } else {
+        console.warn('[Botão Adicionar Projeto] Botão #addProjectBtn não encontrado ao inicializar script.');
+    }
+
+    if (cancelFormBtn) {
+        cancelFormBtn.addEventListener('click', clearForm);
+    } else {
+        console.warn('[Botão Cancelar Projeto] Botão #cancelFormBtn não encontrado ao inicializar script.');
+    }
+
+    if (projectForm) {
+        projectForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            console.log('[Formulário Projeto] Submissão iniciada (com imagem).');
+
+            const formData = new FormData();
+
+            // Adicionar campos de texto ao FormData
+            formData.append('titulo', tituloInput.value);
+            formData.append('descricao', descricaoInput.value);
+            formData.append('categoria', categoriaSelect.value);
+            formData.append('financiamento', financiamentoInput.value || '');
+            formData.append('equipe', equipeInput.value || '');
+
+            // Adicionar a imagem, se selecionada
+            if (imagemInput.files.length > 0) {
+                formData.append('imagem', imagemInput.files[0]);
+                console.log('[Payload Projeto] Imagem selecionada para upload.');
+            } else {
+                console.log('[Payload Projeto] Nenhuma imagem nova selecionada.');
+                // Se estivermos editando e o campo de imagem estiver vazio,
+                // o backend deve manter a imagem existente (ou remover se for o caso).
+                // Não enviamos o campo 'imagem' se estiver vazio para evitar sobrescrever com vazio/null
+                // a menos que seja para uma ação explícita de remoção.
+            }
+
+            const csrfToken = getCsrfToken();
+            if (!csrfToken) {
+                showFeedback(formFeedback, 'Erro: CSRF token não encontrado. Verifique se {% csrf_token %} está no HTML.', 'danger');
+                console.error('CSRF token é nulo ou vazio.');
+                return;
+            }
+            formData.append('csrfmiddlewaretoken', csrfToken);
+
+            let method = 'POST';
+            let url = projectsApiUrl;
+
+            if (currentEditId) {
+                method = 'PUT';
+                url += `${currentEditId}`; // SEM BARRA EXTRA AQUI
+                console.log(`[Requisição Projeto] Modo Edição (PUT) para URL: ${url}`);
+            } else {
+                console.log(`[Requisição Projeto] Modo Criação (POST) para URL: ${url}`);
+            }
+
+            try {
+                showFeedback(formFeedback, 'Salvando projeto...', 'info');
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `Erro do servidor (${response.status}): ${JSON.stringify(errorData)}`);
+                }
+
+                const result = await response.json();
+                showFeedback(formFeedback, `Projeto "${result.titulo}" salvo com sucesso!`, 'success');
+                clearForm();
+                fetchProjects();
+                console.log('[Formulário Projeto] Operação concluída com sucesso.');
+            } catch (error) {
+                console.error('[Formulário Projeto Erro] Erro ao salvar projeto:', error);
+                showFeedback(formFeedback, `Erro ao salvar projeto: ${error.message}`, 'danger');
+            }
+        });
+    } else {
+        console.warn('[Formulário Projeto] Formulário #projectForm não encontrado ao inicializar script.');
+    }
+
+    async function handleEdit(event) {
+        const id = event.target.closest('.edit-btn').dataset.id;
+        console.log(`[Editar Projeto] Clicado para ID: ${id}`);
+        try {
+            const response = await fetch(`${projectsApiUrl}${id}`); // SEM BARRA EXTRA AQUI
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Projeto ${id} não encontrado ou erro HTTP: ${response.status} - ${errorText}`);
+            }
+            const project = await response.json();
+            console.log('[Editar Projeto] Dados do projeto para edição:', project);
+
+            // Preenche o formulário
+            tituloInput.value = project.titulo;
+            descricaoInput.value = project.descricao;
+            categoriaSelect.value = project.categoria;
+            financiamentoInput.value = project.financiamento || '';
+            equipeInput.value = project.equipe || '';
+
+            // Lidar com o campo 'imagem'
+            imagemInput.value = ''; // Limpa o input file para não re-enviar imagem antiga
+            if (project.imagem) {
+                currentImageDisplay.innerHTML = `Imagem atual: <img src="${project.imagem}" style="max-width: 80px; max-height: 60px; vertical-align: middle;"> <a href="${project.imagem}" target="_blank">(Ver Imagem)</a>`;
+            } else {
+                currentImageDisplay.innerHTML = 'Nenhuma imagem atual.';
+            }
+
+            projectIdInput.value = project.id;
+            currentEditId = project.id;
+            formTitle.textContent = 'Editar';
+            projectFormCard.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('[Editar Projeto] Formulário preenchido e exibido.');
+        } catch (error) {
+            console.error('[Editar Projeto Erro] Erro ao buscar projeto para edição:', error);
+            showFeedback(tableFeedback, `Erro ao carregar projeto para edição: ${error.message}`, 'danger');
+        }
+    }
+
+    async function handleDelete(event) {
+        const id = event.target.closest('.delete-btn').dataset.id;
+        console.log(`[Remover Projeto] Clicado para ID: ${id}`);
+        console.log(`[Remover Projeto] Tentando DELETE para URL: ${projectsApiUrl}${id}`); // SEM BARRA EXTRA AQUI
+        if (!confirm('Tem certeza que deseja remover este projeto?')) {
+            console.log('[Remover Projeto] Operação cancelada pelo utilizador.');
+            return;
+        }
+
+        try {
+            const csrfToken = getCsrfToken();
+            if (!csrfToken) {
+                showFeedback(tableFeedback, 'Erro: CSRF token não encontrado.', 'danger');
+                return;
+            }
+
+            const response = await fetch(`${projectsApiUrl}${id}`, { // SEM BARRA EXTRA AQUI
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || `Erro do servidor (${response.status}): ${JSON.stringify(errorData)}`);
+            }
+
+            showFeedback(tableFeedback, 'Projeto removido com sucesso!', 'success');
+            fetchProjects();
+            console.log('[Remover Projeto] Projeto removido com sucesso.');
+        } catch (error) {
+            console.error('[Remover Projeto Erro] Erro ao remover projeto:', error);
+            showFeedback(tableFeedback, `Erro ao remover projeto: ${error.message}`, 'danger');
+        }
+    }
+
+    // --- Inicialização ---
+    fetchProjects();
+    console.log('[Script Projetos] Script finalizado.');
+</script>
+
+{% endblock content %}
