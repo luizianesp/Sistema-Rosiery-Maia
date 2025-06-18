@@ -16,7 +16,7 @@ Este é um sistema web desenvolvido com Django como parte do trabalho final da d
 ### 1. Clone o repositório
 
 ```bash
-git clone -b backend2 https://github.com/luizianesp/Sistema-Rosiery-Maia.git
+git clone -b entrega2 https://github.com/luizianesp/Sistema-Rosiery-Maia.git
 cd Sistema-Rosiery-Maia
 ```
 

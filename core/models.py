@@ -46,11 +46,11 @@ class Publicacao(models.Model):
         ('Capitulo', 'Capitulo'),
         ('Conferencia', 'Conferencia'),
     ]
-    categoria = models.CharField(max_length=20, choices=CATEGORIA_CHOICES)
+    categoria = models.CharField(max_length=20, choices=CATEGORIA_CHOICES, default='Artigo')
     titulo = models.CharField(max_length=200)
-    autores = models.CharField(max_length=100)
-    ano = models.IntegerField()
-    publicado_no = models.CharField(max_length=100)
+    autores = models.CharField(max_length=100, default="Maia R")
+    ano = models.IntegerField(default=2025)
+    publicado_no = models.CharField(max_length=100, default="Revista")
     descricao = models.TextField(blank=True, null=True)
     arquivo = models.FileField(upload_to='publicacao/', blank=True, null=True)
     link = models.URLField()
@@ -70,9 +70,9 @@ class Orientacao(models.Model):
         ('TCC', 'TCC'),
         ('Iniciacao Cientifica', 'Iniciacao Cientifica'),
     ]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='em Andamento')
     aluno = models.CharField(max_length=100)
-    categoria = models.CharField(max_length=20, choices=CATEGORIA_CHOICES)
+    categoria = models.CharField(max_length=20, choices=CATEGORIA_CHOICES, default='TCC')
     trabalho = models.CharField(max_length=200)
     descricao = models.TextField(blank=True, null=True)
     imagem = models.ImageField(upload_to='orientacao/', blank=True, null=True)
