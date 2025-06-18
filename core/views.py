@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import AreaPesquisa, Projeto, Publicacao, Orientacao
+from .models import AreaPesquisa, Projeto, Publicacao, Orientacao, MensagemContato
 from .forms import ContatoForm
 
 # Importações para autenticação
@@ -77,7 +77,22 @@ def user_logout(request):
 
 @login_required
 def admin_dashboard(request):
-    return render(request, 'core/dashboard.html')
+    # Coleta os dados dinâmicos do banco de dados
+    total_publicacoes = Publicacao.objects.count()
+    total_projetos_ativos = Projeto.objects.count() # Adapte se 'ativos' for um campo específico
+    total_orientacoes_atuais = Orientacao.objects.filter(status='em Andamento').count() # Conta apenas 'em Andamento'
+
+    # Últimas 3 mensagens de contato (ordenadas pela mais recente)
+    ultimas_mensagens = MensagemContato.objects.order_by('-enviada_em')[:3]
+
+    context = {
+        'total_publicacoes': total_publicacoes,
+        'total_projetos_ativos': total_projetos_ativos,
+        'total_orientacoes_atuais': total_orientacoes_atuais,
+        'ultimas_mensagens': ultimas_mensagens,
+    }
+    return render(request, 'core/dashboard.html', context) # Passa o contexto para o template
+
 
 # === NOVAS VIEWS ESPECÍFICAS PARA CADA GERENCIAMENTO ===
 @login_required

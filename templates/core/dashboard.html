@@ -1,6 +1,5 @@
 {% extends 'core/base_admin.html' %}
 
-
 {% load static %} {# Necessário se você usa static files aqui #}
 
 {% block title %}Dashboard{% endblock title %}
@@ -14,21 +13,21 @@
             <div class="col-md-4">
                 <div class="dashboard-card">
                     <i class="fas fa-file-alt icon"></i>
-                    <div class="number">52</div>
+                    <div class="number">{{ total_publicacoes }}</div> {# DYNAMIC #}
                     <div class="label">Total de Publicações</div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="dashboard-card">
                     <i class="fas fa-lightbulb icon"></i>
-                    <div class="number">18</div>
+                    <div class="number">{{ total_projetos_ativos }}</div> {# DYNAMIC #}
                     <div class="label">Projetos Ativos</div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="dashboard-card">
                     <i class="fas fa-graduation-cap icon"></i>
-                    <div class="number">12</div>
+                    <div class="number">{{ total_orientacoes_atuais }}</div> {# DYNAMIC #}
                     <div class="label">Orientações Atuais</div>
                 </div>
             </div>
@@ -38,9 +37,17 @@
             <div class="col-12">
                 <h3 class="section-title" style="color: var(--dark-text);">Atividade Recente</h3>
                 <div class="dashboard-card">
-                    <p>Última mensagem recebida: **"Dúvida sobre projeto de IA"** em 05/06/2025.</p>
-                    <p>Última publicação adicionada: **"Impactos da IA na Educação"** em 01/06/2025.</p>
-                    <p>Novo orientando de Mestrado: **João Silva** (2025-2027) - adicionado em 03/06/2025.</p>
+                    {% if ultimas_mensagens %}
+                        {% for mensagem in ultimas_mensagens %}
+                            <p>Última mensagem recebida de **{{ mensagem.nome }}** ({{ mensagem.assunto | truncatechars:30 }}) em {{ mensagem.enviada_em|date:"d/m/Y H:i" }}.</p> {# DYNAMIC #}
+                        {% endfor %}
+                    {% else %}
+                        <p>Nenhuma mensagem de contato recente.</p>
+                    {% endif %}
+
+                    {# Exemplo de como você adicionaria outras atividades se tiver dados para elas #}
+                    {# <p>Última publicação adicionada: **"Impactos da IA na Educação"** em 01/06/2025.</p> #}
+                    {# <p>Novo orientando de Mestrado: **João Silva** (2025-2027) - adicionado em 03/06/2025.</p> #}
                 </div>
             </div>
         </div>
