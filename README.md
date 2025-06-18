@@ -18,6 +18,7 @@ Este é um sistema web desenvolvido com Django como parte do trabalho final da d
 ```bash
 git clone -b entrega2 https://github.com/luizianesp/Sistema-Rosiery-Maia.git
 cd Sistema-Rosiery-Maia
+git checkout entrega2
 ```
 
 ### 2. Crie e ative um ambiente virtual
