@@ -9,16 +9,18 @@ class AreaPesquisaSchema(Schema):
     id: int
     nome: str
     descricao: Optional[str]
-    # Certifique-se de que 'topico' está definido como uma lista de TopicosSchema
-    topico: List['TopicosSchema'] = []
+    topico: List['TopicosSchema'] = [] # Para saída, continua sendo lista de objetos TopicosSchema
 
     class Config:
         from_attributes = True
 
 
-class AreaPesquisaIn(Schema):
+class AreaPesquisaIn(Schema): # ATUALIZADO: Adicionado topicos_ids
     nome: str
     descricao: Optional[str]
+    topicos_ids: Optional[List[int]] = [] # <-- NOVO CAMPO: Lista de IDs de tópicos
+
+
 
 
 class TopicosSchema(Schema):

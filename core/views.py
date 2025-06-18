@@ -102,3 +102,7 @@ def admin_mensagens(request):
 @login_required
 def admin_configuracoes(request):
     return render(request, 'core/configuracoes_site.html')
+
+@login_required
+def admin_areas_pesquisa(request):
+    return render(request, 'core/gerenciar_areas_pesquisa.html')

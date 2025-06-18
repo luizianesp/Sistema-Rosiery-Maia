@@ -231,9 +231,15 @@
         <div class="sidebar">
             <h4>Menu Admin</h4>
             <ul class="nav flex-column">
+
                 <li class="nav-item">
                     <a class="nav-link active" data-content-key="dashboard" href="{% url 'dashboard' %}">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-content-key="areas" href="{% url 'admin_areas_pesquisa' %}">
+                        <i class="fas fa-flask"></i> Gerenciar Pesquisa
                     </a>
                 </li>
                 <li class="nav-item">
@@ -285,6 +291,7 @@
 
             // Mapeia data-content-key para as URLs Django reais
             const adminContentUrls = {
+                'areas': '{% url "admin_areas_pesquisa" %}',
                 'publicacoes': '{% url "admin_publicacoes" %}',
                 'projetos': '{% url "admin_projetos" %}',
                 'orientacoes': '{% url "admin_orientacoes" %}',

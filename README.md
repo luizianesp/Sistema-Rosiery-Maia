@@ -83,13 +83,37 @@ python manage.py test
 ##  Estrutura do Projeto
 
 ```
-Backend/
-├── core/                 # Aplicações Django
-├── static/              # Arquivos estáticos (CSS, JS, Imagens)
-├── templates/           # Templates HTML
-├── manage.py            # Comando principal do Django
-├── requirements.txt     # Dependências do projeto
-└── ...
+├── core/
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── schemas.py             # Definição dos schemas de entrada/saída da API (Pydantic/Ninja)
+│   │   ├── views_area.py          # Endpoints da API para Áreas de Pesquisa
+│   │   ├── views_contato.py       # Endpoints da API para Mensagens de Contato
+│   │   ├── views_orientacao.py    # Endpoints da API para Orientações
+│   │   ├── views_projeto.py       # Endpoints da API para Projetos
+│   │   └── views_publicacao.py    # Endpoints da API para Publicações
+│   ├── migrations/
+│   ├── templates/
+│   │   └── core/
+│   │       ├── base_admin.html    # Template base do painel administrativo
+│   │       ├── gerenciar_orientacoes.html # Template para gerenciamento de Orientações
+│   │       ├── gerenciar_publicacoes.html # Template para gerenciamento de Publicações
+│   │       ├── mensagens_contato.html # Template para visualização de Mensagens de Contato
+│   │       └── ... outros templates de frontend/admin
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py                   # Formulários Django (ex: ContatoForm)
+│   ├── models.py                  # Definição dos modelos de banco de dados
+│   ├── urls.py                    # URLs das views tradicionais do Django (frontend)
+│   └── views.py                   # Views tradicionais do Django (frontend e dashboard admin)
+├── your_project_name/             # Diretório raiz do seu projeto Django
+│   ├── __init__.py
+│   ├── settings.py                # Configurações do projeto
+│   ├── urls.py                    # URLs PRINCIPAIS do projeto (incluindo API Ninja)
+│   └── wsgi.py
+├── manage.py
+└── README.md   
 ```
 
 ---

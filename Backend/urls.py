@@ -43,6 +43,7 @@ urlpatterns = [
     path('admin_orientacoes/', admin_orientacoes, name='admin_orientacoes'),
     path('admin_mensagens/', admin_mensagens, name='admin_mensagens'),
     path('admin_configuracoes/', admin_configuracoes, name='admin_configuracoes'),
+    path('admin_areas-pesquisa/', admin_areas_pesquisa, name='admin_areas_pesquisa'),
 
 ]
 
