@@ -1,5 +1,6 @@
 {% block content %}
 <div class="content-area">
+    <p style="color: red; font-weight: bold;">TESTE DE CARREGAMENTO: Se vir isto, o ficheiro foi encontrado!</p>
     <h1>Gerenciar Publicações</h1>
     <p class="lead">Aqui você pode adicionar, editar ou remover publicações do site.</p>
 
@@ -235,8 +236,9 @@
             event.preventDefault();
             console.log('[Formulário] Submissão iniciada (com arquivo).');
 
-            const formData = new FormData();
+            const formData = new FormData(); // Usar FormData para upload de arquivo
 
+            // Adicionar campos de texto ao FormData
             formData.append('titulo', tituloInput.value);
             formData.append('autores', autoresInput.value);
             formData.append('ano', parseInt(anoInput.value));
@@ -245,15 +247,14 @@
             formData.append('descricao', descricaoInput.value || '');
             formData.append('link', linkInput.value);
 
+            // Adicionar o arquivo, se selecionado
             if (arquivoInput.files.length > 0) {
                 formData.append('arquivo', arquivoInput.files[0]);
                 console.log('[Payload] Arquivo selecionado para upload.');
             } else {
-                // Para PUT, se nenhum arquivo novo for selecionado, podemos enviar 'arquivo: null'
-                // para indicar que não há alteração no arquivo, ou se for para remover, enviar um indicador
-                // Por agora, se não há arquivo selecionado, não o enviamos no FormData
-                // para que o backend não tente sobrescrever com um valor vazio/nulo se não for a intenção.
-                // Se a intenção é remover um arquivo existente, uma checkbox 'remover_arquivo' seria ideal.
+                // Se nenhum arquivo novo for selecionado, e estivermos editando,
+                // não envie o campo 'arquivo' para manter o existente.
+                // Se for criação e não houver arquivo, o campo é 'null' por padrão no modelo.
                 console.log('[Payload] Nenhum arquivo novo selecionado.');
             }
 
@@ -263,14 +264,14 @@
                 console.error('CSRF token é nulo ou vazio.');
                 return;
             }
-            formData.append('csrfmiddlewaretoken', csrfToken);
+            formData.append('csrfmiddlewaretoken', csrfToken); // Adiciona CSRF ao FormData
 
             let method = 'POST';
             let url = publicationsApiUrl;
 
             if (currentEditId) {
                 method = 'PUT';
-                url += `${currentEditId}`; // REMOVIDA A BARRA EXTRA AQUI
+                url += `${currentEditId}/`;
                 console.log(`[Requisição] Modo Edição (PUT) para URL: ${url}`);
             } else {
                 console.log(`[Requisição] Modo Criação (POST) para URL: ${url}`);
@@ -278,16 +279,18 @@
 
             try {
                 showFeedback(formFeedback, 'Salvando publicação...', 'info');
+                // IMPORTANTE: NÃO defina 'Content-Type': 'application/json' para FormData
                 const response = await fetch(url, {
                     method: method,
                     headers: {
-                        'X-CSRFToken': csrfToken,
+                        // O navegador define Content-Type: multipart/form-data automaticamente com FormData
+                        'X-CSRFToken': csrfToken, // CSRF ainda é necessário no header
                     },
-                    body: formData,
+                    body: formData, // Envia o FormData
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
+                    const errorData = await response.json(); // Tenta ler JSON para erros
                     throw new Error(errorData.detail || `Erro do servidor (${response.status}): ${JSON.stringify(errorData)}`);
                 }
 
@@ -306,10 +309,10 @@
     }
 
     async function handleEdit(event) {
-        const id = event.target.closest('.edit-btn').dataset.id; // Uso .closest para garantir que pego o botão
+        const id = event.target.dataset.id;
         console.log(`[Editar] Clicado para ID: ${id}`);
         try {
-            const response = await fetch(`${publicationsApiUrl}${id}`); // REMOVIDA A BARRA EXTRA AQUI
+            const response = await fetch(`${publicationsApiUrl}${id}`);
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Publicação ${id} não encontrada ou erro HTTP: ${response.status} - ${errorText}`);
@@ -317,6 +320,7 @@
             const pub = await response.json();
             console.log('[Editar] Dados da publicação para edição:', pub);
 
+            // Preenche o formulário
             tituloInput.value = pub.titulo;
             autoresInput.value = pub.autores;
             anoInput.value = pub.ano;
@@ -325,9 +329,12 @@
             descricaoInput.value = pub.descricao || '';
             linkInput.value = pub.link;
 
-            arquivoInput.value = '';
+            // Lidar com o campo 'arquivo'
+            arquivoInput.value = ''; // Limpa o input file para não re-enviar arquivo antigo
             if (pub.arquivo) {
                 currentFileDisplay.innerHTML = `Arquivo atual: <a href="${pub.arquivo}" target="_blank">Ver PDF</a>`;
+                // Não é possível preencher programaticamente input type="file" por segurança.
+                // O usuário terá que selecionar um novo arquivo se quiser alterar.
             } else {
                 currentFileDisplay.innerHTML = 'Nenhum arquivo atual.';
             }
@@ -345,9 +352,8 @@
     }
 
     async function handleDelete(event) {
-        const id = event.target.closest('.delete-btn').dataset.id; // Uso .closest para garantir que pego o botão
+        const id = event.target.dataset.id;
         console.log(`[Remover] Clicado para ID: ${id}`);
-        console.log(`[Remover] Tentando DELETE para URL: ${publicationsApiUrl}${id}`); // REMOVIDA A BARRA EXTRA AQUI
         if (!confirm('Tem certeza que deseja remover esta publicação?')) {
             console.log('[Remover] Operação cancelada pelo utilizador.');
             return;
@@ -360,7 +366,7 @@
                 return;
             }
 
-            const response = await fetch(`${publicationsApiUrl}${id}`, { // REMOVIDA A BARRA EXTRA AQUI
+            const response = await fetch(`${publicationsApiUrl}${id}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRFToken': csrfToken,

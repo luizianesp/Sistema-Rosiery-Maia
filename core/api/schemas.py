@@ -94,10 +94,10 @@ class OrientacaoSchema(Schema):
     id: int
     status: str
     aluno: str
-    categoria: str # Garanta que este campo está aqui e é do tipo str
+    categoria: str
     trabalho: str
     descricao: Optional[str]
-    imagem: Optional[str]
+    imagem: Optional[str] # Para saída, continua sendo string (URL)
 
     class Config:
         from_attributes = True
@@ -109,7 +109,7 @@ class OrientacaoIn(Schema):
     categoria: str
     trabalho: str
     descricao: Optional[str]
-    imagem: Optional[str]
+    imagem: Optional[File[UploadedFile]] = None # <--- ALTERADO PARA UploadedFile para entrada!
 
 
 class MensagemContatoSchema(Schema):

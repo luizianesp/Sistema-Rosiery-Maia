@@ -1,1 +1,259 @@
-ola!
+{% block content %}
+<div class="content-area">
+    <h1>Gerenciar Orientações</h1>
+    <p class="lead">Aqui você pode visualizar, adicionar, editar ou remover orientações do site.</p>
+
+    <!-- Botões de Ação -->
+    <div class="mb-3">
+        <button type="button" class="btn btn-primary me-2" style="background-color: var(--accent-color); border-color: var(--accent-color); color: white;" id="addOrientacaoBtn">
+            <i class="fas fa-plus-circle me-2"></i>Adicionar Nova Orientação
+        </button>
+    </div>
+
+    <!-- Formulário de Adicionar/Editar Orientação -->
+    <div class="card p-4 shadow-sm mb-4" id="orientacaoFormCard" style="display: none;">
+        <h5><span id="formTitle">Adicionar</span> Orientação</h5>
+        <form id="orientacaoForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="orientacaoId">
+
+            <div class="mb-3">
+                <label for="aluno" class="form-label">Aluno</label>
+                <input type="text" class="form-control" id="aluno" name="aluno" required>
+            </div>
+            <div class="mb-3">
+                <label for="trabalho" class="form-label">Trabalho</label>
+                <input type="text" class="form-control" id="trabalho" name="trabalho" required>
+            </div>
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="imagem" class="form-label">Imagem do Trabalho</label>
+                <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*">
+                <small class="form-text text-muted" id="currentImageDisplay"></small>
+            </div>
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoria</label>
+                <select class="form-select" id="categoria" name="categoria" required>
+                    <option value="">Selecione a Categoria</option>
+                    <option value="Doutorado">Doutorado</option>
+                    <option value="Mestrado">Mestrado</option>
+                    <option value="TCC">TCC</option>
+                    <option value="Iniciacao Cientifica">Iniciação Científica</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status" required>
+                    <option value="">Selecione o Status</option>
+                    <option value="em Andamento">Em Andamento</option>
+                    <option value="Concluido">Concluído</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="background-color: var(--accent-color); border-color: var(--accent-color); color: white;">
+                <i class="fas fa-save me-2"></i>Salvar Orientação
+            </button>
+            <button type="button" class="btn btn-secondary ms-2" id="cancelFormBtn">Cancelar</button>
+        </form>
+        <div id="form-feedback" class="mt-3" style="display: none;"></div>
+    </div>
+
+    <!-- Tabela de Orientações -->
+    <div class="card p-3 shadow-sm">
+        <h5>Orientações Atuais</h5>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Aluno</th>
+                        <th>Trabalho</th>
+                        <th>Categoria</th>
+                        <th>Status</th>
+                        <th>Imagem</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="orientacoesTableBody">
+                    <tr><td colspan="7" class="text-center">Carregando orientações...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="table-feedback" class="mt-3" style="display: none;"></div>
+    </div>
+</div>
+
+<script>
+(function() {
+    console.log('[Script Orientações] Script iniciado.');
+
+    const orientacoesApiUrl = '/api/orientacoes/';
+    const orientacoesTableBody = document.getElementById('orientacoesTableBody');
+    const addOrientacaoBtn = document.getElementById('addOrientacaoBtn');
+    const orientacaoFormCard = document.getElementById('orientacaoFormCard');
+    const orientacaoForm = document.getElementById('orientacaoForm');
+    const formTitle = document.getElementById('formTitle');
+    const orientacaoIdInput = document.getElementById('orientacaoId');
+    const cancelFormBtn = document.getElementById('cancelFormBtn');
+    const formFeedback = document.getElementById('form-feedback');
+    const tableFeedback = document.getElementById('table-feedback');
+
+    const alunoInput = document.getElementById('aluno');
+    const trabalhoInput = document.getElementById('trabalho');
+    const descricaoInput = document.getElementById('descricao');
+    const imagemInput = document.getElementById('imagem');
+    const categoriaSelect = document.getElementById('categoria');
+    const statusSelect = document.getElementById('status');
+    const currentImageDisplay = document.getElementById('currentImageDisplay');
+
+    let currentEditId = null;
+
+    function getCsrfToken() {
+        const csrfElement = document.querySelector('[name=csrfmiddlewaretoken]');
+        return csrfElement ? csrfElement.value : '';
+    }
+
+    function showFeedback(element, message, type = 'info') {
+        element.textContent = message;
+        element.className = `alert alert-${type}`;
+        element.style.display = 'block';
+        setTimeout(() => { element.style.display = 'none'; }, 5000);
+    }
+
+    function clearForm() {
+        orientacaoForm.reset();
+        orientacaoIdInput.value = '';
+        currentEditId = null;
+        formTitle.textContent = 'Adicionar';
+        orientacaoFormCard.style.display = 'none';
+        formFeedback.style.display = 'none';
+        tableFeedback.style.display = 'none';
+        currentImageDisplay.innerHTML = '';
+        imagemInput.value = '';
+    }
+
+    async function fetchOrientacoes() {
+        orientacoesTableBody.innerHTML = '<tr><td colspan="7" class="text-center">Carregando orientações...</td></tr>';
+        try {
+            const response = await fetch(orientacoesApiUrl);
+            const data = await response.json();
+            renderOrientacoesTable(data);
+        } catch (e) {
+            orientacoesTableBody.innerHTML = '<tr><td colspan="7" class="text-danger text-center">Erro ao carregar orientações.</td></tr>';
+        }
+    }
+
+    function renderOrientacoesTable(orientacoes) {
+        orientacoesTableBody.innerHTML = '';
+        if (orientacoes.length === 0) {
+            orientacoesTableBody.innerHTML = '<tr><td colspan="7" class="text-center">Nenhuma orientação encontrada.</td></tr>';
+            return;
+        }
+
+        orientacoes.forEach(o => {
+            const imageUrl = o.imagem || 'https://placehold.co/60x40/CCCCCC/FFFFFF?text=Sem+Img';
+            const row = orientacoesTableBody.insertRow();
+            row.innerHTML = `
+                <td>${o.id}</td>
+                <td>${o.aluno}</td>
+                <td>${o.trabalho}</td>
+                <td>${o.categoria}</td>
+                <td>${o.status}</td>
+                <td><img src="${imageUrl}" alt="Imagem" class="circular-image" style="width: 50px; height: 50px; object-fit: cover;"></td>
+                <td>
+                    <button class="btn btn-sm btn-info me-2 edit-btn" data-id="${o.id}">Editar</button>
+                    <button class="btn btn-sm btn-danger delete-btn" data-id="${o.id}">Remover</button>
+                </td>
+            `;
+        });
+
+        document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', handleEdit));
+        document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
+    }
+
+    async function handleEdit(event) {
+        const id = event.target.dataset.id;
+        const response = await fetch(`${orientacoesApiUrl}${id}`);
+        const o = await response.json();
+        alunoInput.value = o.aluno;
+        trabalhoInput.value = o.trabalho;
+        descricaoInput.value = o.descricao || '';
+        categoriaSelect.value = o.categoria;
+        statusSelect.value = o.status;
+        currentImageDisplay.innerHTML = o.imagem ? `Imagem atual: <a href="${o.imagem}" target="_blank">Ver</a>` : 'Nenhuma imagem atual.';
+        orientacaoIdInput.value = o.id;
+        currentEditId = o.id;
+        formTitle.textContent = 'Editar';
+        orientacaoFormCard.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function handleDelete(event) {
+        const id = event.target.dataset.id;
+        if (!confirm('Deseja realmente excluir esta orientação?')) return;
+        const response = await fetch(`${orientacoesApiUrl}${id}`, {
+            method: 'DELETE',
+            headers: { 'X-CSRFToken': getCsrfToken() }
+        });
+        if (response.ok) {
+            showFeedback(tableFeedback, 'Orientação removida com sucesso.', 'success');
+            fetchOrientacoes();
+        } else {
+            showFeedback(tableFeedback, 'Erro ao remover.', 'danger');
+        }
+    }
+
+    if (addOrientacaoBtn) {
+        addOrientacaoBtn.addEventListener('click', () => {
+            clearForm();
+            orientacaoFormCard.style.display = 'block';
+        });
+    }
+
+    if (cancelFormBtn) {
+        cancelFormBtn.addEventListener('click', clearForm);
+    }
+
+    if (orientacaoForm) {
+        orientacaoForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('aluno', alunoInput.value);
+            formData.append('trabalho', trabalhoInput.value);
+            formData.append('descricao', descricaoInput.value);
+            formData.append('status', statusSelect.value);
+            formData.append('categoria', categoriaSelect.value);
+            if (imagemInput.files.length > 0) {
+                formData.append('imagem', imagemInput.files[0]);
+            }
+            formData.append('csrfmiddlewaretoken', getCsrfToken());
+
+            const method = currentEditId ? 'PUT' : 'POST';
+            const url = currentEditId ? `${orientacoesApiUrl}${currentEditId}` : orientacoesApiUrl;
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'X-CSRFToken': getCsrfToken(),
+                    },
+                    body: formData
+                });
+                if (!response.ok) throw new Error('Erro ao salvar orientação.');
+                showFeedback(formFeedback, 'Orientação salva com sucesso!', 'success');
+                clearForm();
+                fetchOrientacoes();
+            } catch (e) {
+                showFeedback(formFeedback, e.message, 'danger');
+            }
+        });
+    }
+
+    fetchOrientacoes();
+})();
+</script>
+
+{% endblock content %}

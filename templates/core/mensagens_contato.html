@@ -1,0 +1,209 @@
+{% load static %}
+
+{% block title %}Mensagens de Contato{% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="section-title">Gerenciar Mensagens de Contato</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            Lista de Mensagens
+            </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Assunto</th>
+                            <th>Mensagem</th>
+                            <th>Notícias</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mensagens-table-body">
+                        <tr>
+                            <td colspan="7" class="text-center">Carregando mensagens...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mensagemModal" tabindex="-1" aria-labelledby="mensagemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mensagemModalLabel">Detalhes da Mensagem</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="mensagemForm">
+                    <input type="hidden" id="mensagemId" name="id">
+                    <div class="mb-3">
+                        <label for="mensagemNome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="mensagemNome" name="nome" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mensagemEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="mensagemEmail" name="email" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mensagemAssunto" class="form-label">Assunto</label>
+                        <input type="text" class="form-control" id="mensagemAssunto" name="assunto" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mensagemTexto" class="form-label">Mensagem</label>
+                        <textarea class="form-control" id="mensagemTexto" name="mensagem" rows="5" readonly></textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="mensagemNoticias" name="noticias" disabled>
+                        <label class="form-check-label" for="mensagemNoticias">Receber Notícias</label>
+                    </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // **REMOVA ESTA LINHA: document.addEventListener('DOMContentLoaded', function() {**
+
+        const tableBody = document.getElementById('mensagens-table-body');
+        const mensagemModal = new bootstrap.Modal(document.getElementById('mensagemModal'));
+        const mensagemModalLabel = document.getElementById('mensagemModalLabel');
+        const mensagemForm = document.getElementById('mensagemForm');
+        const mensagemId = document.getElementById('mensagemId');
+
+        // URL da API para Mensagens de Contato (ajuste conforme sua configuração de URL Ninja)
+        const API_URL = '/api/contatos/'; // Exemplo: Certifique-se de que corresponde ao seu urls.py e router Ninja
+
+        // Função para carregar as mensagens da API
+        async function fetchMensagens() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! Status: ${response.status}`);
+                }
+                const mensagens = await response.json();
+                renderMensagens(mensagens);
+            } catch (error) {
+                console.error('Erro ao buscar mensagens:', error);
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Erro ao carregar mensagens.</td></tr>';
+            }
+        }
+
+        // Função para renderizar as mensagens na tabela
+        function renderMensagens(mensagens) {
+            tableBody.innerHTML = ''; // Limpa a tabela
+            if (mensagens.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Nenhuma mensagem encontrada.</td></tr>';
+                return;
+            }
+
+            mensagens.forEach(mensagem => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${mensagem.id}</td>
+                    <td>${mensagem.nome}</td>
+                    <td>${mensagem.email}</td>
+                    <td>${mensagem.assunto}</td>
+                    <td>${mensagem.mensagem.substring(0, 70)}...</td> <td>${mensagem.noticias ? 'Sim' : 'Não'}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-info view-btn me-2" data-id="${mensagem.id}">
+                            <i class="fas fa-eye"></i> Visualizar
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="${mensagem.id}">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
+                    </td>
+                `;
+            });
+            addEventListenersToButtons();
+        }
+
+        // Função para adicionar listeners aos botões de Visualizar e Excluir
+        function addEventListenersToButtons() {
+            document.querySelectorAll('.view-btn').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const id = event.currentTarget.dataset.id;
+                    await openViewModal(id);
+                });
+            });
+
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const id = event.currentTarget.dataset.id;
+                    if (confirm('Tem certeza que deseja excluir esta mensagem?')) {
+                        await deleteMensagem(id);
+                    }
+                });
+            });
+        }
+
+        // Função para abrir o modal em modo de visualização
+        async function openViewModal(id) {
+            try {
+                const response = await fetch(`${API_URL}${id}`);
+                if (!response.ok) {
+                    throw new Error(`Erro ao buscar mensagem para visualização! Status: ${response.status}`);
+                }
+                const mensagem = await response.json();
+
+                mensagemModalLabel.textContent = 'Detalhes da Mensagem';
+                mensagemForm.reset(); // Limpa o formulário
+
+                // Preenche o formulário com os dados da mensagem
+                mensagemId.value = mensagem.id;
+                document.getElementById('mensagemNome').value = mensagem.nome;
+                document.getElementById('mensagemEmail').value = mensagem.email;
+                document.getElementById('mensagemAssunto').value = mensagem.assunto;
+                document.getElementById('mensagemTexto').value = mensagem.mensagem;
+                document.getElementById('mensagemNoticias').checked = mensagem.noticias;
+
+                mensagemModal.show();
+            } catch (error) {
+                console.error('Erro ao abrir modal de visualização:', error);
+                alert('Não foi possível carregar os dados da mensagem.');
+            }
+        }
+
+        // Função para excluir uma mensagem
+        async function deleteMensagem(id) {
+            try {
+                const response = await fetch(`${API_URL}${id}`, {
+                    method: 'DELETE',
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao excluir mensagem! Status: ${response.status}`);
+                }
+
+                alert('Mensagem excluída com sucesso!');
+                fetchMensagens(); // Recarrega a lista
+            } catch (error) {
+                console.error('Erro ao excluir mensagem:', error);
+                alert(`Erro ao excluir mensagem: ${error.message}`);
+            }
+        }
+
+        // Carrega as mensagens quando a página é carregada
+        fetchMensagens();
+
+    // **REMOVA ESTA LINHA: });**
+</script>
+{% endblock content %}
