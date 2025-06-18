@@ -49,6 +49,7 @@ O projeto utiliza o banco de dados padrão do Django (SQLite) por padrão. Não 
 ### 5. Aplique as migrações
 
 ```bash
+python manage.py makemigrations
 python manage.py migrate
 ```
 
