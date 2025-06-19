@@ -1,5 +1,4 @@
 {% load static %}
-
 {% block title %}Gerenciar Áreas de Pesquisa{% endblock title %}
 
 {% block content %}
@@ -18,8 +17,8 @@
     <div class="card p-4 shadow-sm mb-4" id="areaFormCard" style="display: none;">
         <h5><span id="formTitle">Adicionar</span> Área de Pesquisa</h5>
         <form id="areaForm">
-            {% csrf_token %} {# CSRF token é necessário para POST/PUT/DELETE #}
-            <input type="hidden" id="areaId"> {# Para armazenar o ID ao editar #}
+            {% csrf_token %}
+            <input type="hidden" id="areaId">
 
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome da Área</label>
@@ -33,7 +32,7 @@
             <div class="mb-3">
                 <label for="topicosSelect" class="form-label">Tópicos (Selecione um ou mais)</label>
                 <select class="form-select" id="topicosSelect" name="topicos_ids" multiple>
-                    </select>
+                </select>
                 <small class="form-text text-muted">Use Ctrl/Cmd + clique para selecionar múltiplos.</small>
             </div>
 
@@ -41,9 +40,7 @@
                     style="background-color: var(--accent-color); border-color: var(--accent-color); color: white;">
                 <i class="fas fa-save me-2"></i>Salvar Área
             </button>
-            <button type="button" class="btn btn-secondary ms-2" id="cancelFormBtn">
-                Cancelar
-            </button>
+            <button type="button" class="btn btn-secondary ms-2" id="cancelFormBtn">Cancelar</button>
         </form>
         <div id="form-feedback" class="mt-3" style="display: none;"></div>
     </div>
@@ -57,12 +54,12 @@
                         <th>ID</th>
                         <th>Nome</th>
                         <th>Descrição</th>
-                        <th>Tópicos</th> {# Coluna para os tópicos #}
+                        <th>Tópicos</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody id="areasTableBody">
-                    <tr><td colspan="5" class="text-center">Carregando áreas de pesquisa...</td></tr> {# Colspan ajustado #}
+                    <tr><td colspan="5" class="text-center">Carregando áreas de pesquisa...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -71,11 +68,11 @@
 </div>
 
 <script>
-    // Script específico para Gerenciar Áreas de Pesquisa
+(function () {
     console.log('[Script Áreas de Pesquisa] Script iniciado.');
 
     const areasApiUrl = '/api/areas/';
-    const topicosApiUrl = '/api/areas/topicos/'; // <-- NOVO: URL para listar tópicos
+    const topicosApiUrl = '/api/areas/topicos/';
     const areasTableBody = document.getElementById('areasTableBody');
     const addAreaBtn = document.getElementById('addAreaBtn');
     const areaFormCard = document.getElementById('areaFormCard');
@@ -85,23 +82,15 @@
     const cancelFormBtn = document.getElementById('cancelFormBtn');
     const formFeedback = document.getElementById('form-feedback');
     const tableFeedback = document.getElementById('table-feedback');
-
-    // Referências aos campos do formulário
     const nomeInput = document.getElementById('nome');
     const descricaoInput = document.getElementById('descricao');
-    const topicosSelect = document.getElementById('topicosSelect'); // <-- NOVO: Referência ao select de tópicos
-
+    const topicosSelect = document.getElementById('topicosSelect');
     let currentEditId = null;
-    let allTopicos = []; // Para armazenar todos os tópicos disponíveis
+    let allTopicos = [];
 
-    // --- Funções de Utilitário ---
     function getCsrfToken() {
         const csrfElement = document.querySelector('input[name="csrfmiddlewaretoken"]');
-        if (csrfElement) {
-            return csrfElement.value;
-        }
-        console.error('[CSRF Token] Elemento csrfmiddlewaretoken não encontrado.');
-        return '';
+        return csrfElement ? csrfElement.value : '';
     }
 
     function showFeedback(element, message, type = 'info') {
@@ -109,12 +98,11 @@
         element.className = `alert alert-${type}`;
         element.style.display = 'block';
         setTimeout(() => {
-            if (element) element.style.display = 'none';
+            element.style.display = 'none';
         }, 5000);
     }
 
     function clearForm() {
-        console.log('[Formulário] Limpando formulário.');
         areaForm.reset();
         areaIdInput.value = '';
         currentEditId = null;
@@ -122,26 +110,15 @@
         areaFormCard.style.display = 'none';
         formFeedback.style.display = 'none';
         tableFeedback.style.display = 'none';
-        // Desseleciona todos os tópicos no select
-        Array.from(topicosSelect.options).forEach(option => {
-            option.selected = false;
-        });
+        Array.from(topicosSelect.options).forEach(option => option.selected = false);
     }
 
-    // --- Funções de Renderização e Carga de Dados ---
-
-    // NOVO: Função para buscar e popular o select de tópicos
     async function fetchAndPopulateTopicos() {
         try {
             const response = await fetch(topicosApiUrl);
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Erro HTTP ao buscar tópicos: ${response.status} - ${errorText}`);
-            }
+            if (!response.ok) throw new Error('Erro ao buscar tópicos.');
             allTopicos = await response.json();
-            console.log('[API] Tópicos carregados:', allTopicos);
-
-            topicosSelect.innerHTML = ''; // Limpa as opções existentes
+            topicosSelect.innerHTML = '';
             allTopicos.forEach(topico => {
                 const option = document.createElement('option');
                 option.value = topico.id;
@@ -149,223 +126,121 @@
                 topicosSelect.appendChild(option);
             });
         } catch (error) {
-            console.error('[API Erro] Erro ao buscar e popular tópicos:', error);
-            showFeedback(tableFeedback, `Erro ao carregar tópicos para o formulário: ${error.message}`, 'danger');
+            showFeedback(tableFeedback, `Erro ao carregar tópicos: ${error.message}`, 'danger');
         }
     }
 
-
     async function fetchAreas() {
-        console.log('[API] Iniciando busca de áreas de pesquisa...');
-        areasTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Carregando áreas de pesquisa...</td></tr>';
+        areasTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Carregando...</td></tr>';
         try {
             const response = await fetch(areasApiUrl);
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Erro HTTP: ${response.status} - ${errorText}`);
-            }
             const areas = await response.json();
-            console.log('[API] Áreas de pesquisa carregadas:', areas);
             renderAreasTable(areas);
         } catch (error) {
-            console.error('[API Erro] Erro ao buscar áreas de pesquisa:', error);
-            areasTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Falha ao carregar áreas de pesquisa. Verifique o console para mais detalhes.</td></tr>';
-            showFeedback(tableFeedback, `Erro ao carregar áreas de pesquisa: ${error.message}`, 'danger');
+            areasTableBody.innerHTML = '<tr><td colspan="5" class="text-danger text-center">Erro ao carregar.</td></tr>';
         }
     }
 
     function renderAreasTable(areas) {
-        console.log('[Renderização] Renderizando tabela de áreas de pesquisa.');
         areasTableBody.innerHTML = '';
         if (areas.length === 0) {
-            areasTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhuma área de pesquisa encontrada.</td></tr>';
+            areasTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhuma área encontrada.</td></tr>';
             return;
         }
-
         areas.forEach(area => {
+            const topicosNomes = area.topico?.map(t => t.nome).join(', ') || 'N/A';
             const row = areasTableBody.insertRow();
-            const topicosNomes = area.topico && area.topico.length > 0
-                                 ? area.topico.map(topico => topico.nome).join(', ')
-                                 : 'N/A';
-
             row.innerHTML = `
                 <td>${area.id}</td>
                 <td>${area.nome}</td>
                 <td>${area.descricao || 'N/A'}</td>
                 <td>${topicosNomes}</td>
                 <td>
-                    <button type="button" class="btn btn-info btn-sm me-2 edit-btn" data-id="${area.id}">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
-                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${area.id}">
-                        <i class="fas fa-trash"></i> Remover
-                    </button>
+                    <button class="btn btn-info btn-sm me-2 edit-btn" data-id="${area.id}">Editar</button>
+                    <button class="btn btn-danger btn-sm delete-btn" data-id="${area.id}">Remover</button>
                 </td>
             `;
         });
-
         document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', handleEdit));
         document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
-        console.log('[Renderização] Listeners de botões adicionados.');
     }
 
-    // --- Handlers de Eventos do Formulário e Botões ---
-    if (addAreaBtn) {
-        addAreaBtn.addEventListener('click', () => {
-            console.log('[Botão Adicionar] Clicado.');
-            clearForm();
-            areaFormCard.style.display = 'block';
-            formTitle.textContent = 'Adicionar';
-            nomeInput.focus();
-        });
-    } else {
-        console.warn('[Botão Adicionar] Botão #addAreaBtn não encontrado ao inicializar script.');
-    }
+    if (addAreaBtn) addAreaBtn.addEventListener('click', () => {
+        clearForm();
+        areaFormCard.style.display = 'block';
+        nomeInput.focus();
+    });
 
-    if (cancelFormBtn) {
-        cancelFormBtn.addEventListener('click', clearForm);
-    } else {
-        console.warn('[Botão Cancelar] Botão #cancelFormBtn não encontrado ao inicializar script.');
-    }
+    if (cancelFormBtn) cancelFormBtn.addEventListener('click', clearForm);
 
     if (areaForm) {
-        areaForm.addEventListener('submit', async function(event) {
+        areaForm.addEventListener('submit', async function (event) {
             event.preventDefault();
-            console.log('[Formulário] Submissão iniciada.');
-
-            // Coleta os IDs dos tópicos selecionados
-            const selectedTopicosIds = Array.from(topicosSelect.selectedOptions).map(option => parseInt(option.value));
-
+            const selectedTopicosIds = Array.from(topicosSelect.selectedOptions).map(opt => parseInt(opt.value));
             const formData = {
                 nome: nomeInput.value,
                 descricao: descricaoInput.value || null,
-                topicos_ids: selectedTopicosIds // <-- NOVO: Inclui os IDs dos tópicos
+                topicos_ids: selectedTopicosIds
             };
-
             const csrfToken = getCsrfToken();
-            if (!csrfToken) {
-                showFeedback(formFeedback, 'Erro: CSRF token não encontrado. Verifique se {% csrf_token %} está no HTML.', 'danger');
-                console.error('CSRF token é nulo ou vazio.');
-                return;
-            }
-
-            let method = 'POST';
-            let url = areasApiUrl;
-
-            if (currentEditId) {
-                method = 'PUT';
-                url += `${currentEditId}`; // Sem barra final para PUT/DELETE por ID
-                console.log(`[Requisição] Modo Edição (PUT) para URL: ${url}`);
-            } else {
-                console.log(`[Requisição] Modo Criação (POST) para URL: ${url}`);
-            }
+            let method = currentEditId ? 'PUT' : 'POST';
+            let url = currentEditId ? `${areasApiUrl}${currentEditId}` : areasApiUrl;
 
             try {
-                showFeedback(formFeedback, 'Salvando área de pesquisa...', 'info');
+                showFeedback(formFeedback, 'Salvando...', 'info');
                 const response = await fetch(url, {
-                    method: method,
+                    method,
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken,
+                        'X-CSRFToken': csrfToken
                     },
-                    body: JSON.stringify(formData),
+                    body: JSON.stringify(formData)
                 });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || `Erro do servidor (${response.status}): ${JSON.stringify(errorData)}`);
-                }
-
                 const result = await response.json();
-                showFeedback(formFeedback, `Área "${result.nome}" salva com sucesso!`, 'success');
+                if (!response.ok) throw new Error(result.detail || 'Erro ao salvar.');
+                showFeedback(formFeedback, 'Salvo com sucesso!', 'success');
                 clearForm();
                 fetchAreas();
-                console.log('[Formulário] Operação concluída com sucesso.');
             } catch (error) {
-                console.error('[Formulário Erro] Erro ao salvar área de pesquisa:', error);
-                showFeedback(formFeedback, `Erro ao salvar área de pesquisa: ${error.message}`, 'danger');
+                showFeedback(formFeedback, `Erro: ${error.message}`, 'danger');
             }
         });
-    } else {
-        console.warn('[Formulário] Formulário #areaForm não encontrado ao inicializar script.');
     }
 
     async function handleEdit(event) {
         const id = event.target.dataset.id;
-        console.log(`[Editar] Clicado para ID: ${id}`);
-        try {
-            const response = await fetch(`${areasApiUrl}${id}`);
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Área de pesquisa ${id} não encontrada ou erro HTTP: ${response.status} - ${errorText}`);
-            }
-            const area = await response.json();
-            console.log('[Editar] Dados da área de pesquisa para edição:', area);
-
-            // Preenche o formulário
-            nomeInput.value = area.nome;
-            descricaoInput.value = area.descricao || '';
-
-            // NOVO: Seleciona os tópicos da área no select
-            Array.from(topicosSelect.options).forEach(option => {
-                option.selected = area.topico.some(topico => topico.id === parseInt(option.value));
-            });
-
-
-            areaIdInput.value = area.id;
-            currentEditId = area.id;
-            formTitle.textContent = 'Editar';
-            areaFormCard.style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            console.log('[Editar] Formulário preenchido e exibido.');
-        } catch (error) {
-            console.error('[Editar Erro] Erro ao buscar área de pesquisa para edição:', error);
-            showFeedback(tableFeedback, `Erro ao carregar área de pesquisa para edição: ${error.message}`, 'danger');
-        }
+        const response = await fetch(`${areasApiUrl}${id}`);
+        const area = await response.json();
+        nomeInput.value = area.nome;
+        descricaoInput.value = area.descricao || '';
+        Array.from(topicosSelect.options).forEach(opt => {
+            opt.selected = area.topico.some(t => t.id === parseInt(opt.value));
+        });
+        areaIdInput.value = area.id;
+        currentEditId = area.id;
+        formTitle.textContent = 'Editar';
+        areaFormCard.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     async function handleDelete(event) {
         const id = event.target.dataset.id;
-        console.log(`[Remover] Clicado para ID: ${id}`);
-        if (!confirm('Tem certeza que deseja remover esta área de pesquisa?')) {
-            console.log('[Remover] Operação cancelada pelo utilizador.');
-            return;
-        }
-
+        if (!confirm('Tem certeza que deseja excluir?')) return;
         try {
             const csrfToken = getCsrfToken();
-            if (!csrfToken) {
-                showFeedback(tableFeedback, 'Erro: CSRF token não encontrado.', 'danger');
-                return;
-            }
-
-            const response = await fetch(`${areasApiUrl}${id}`, { // Sem barra final para PUT/DELETE por ID
+            const response = await fetch(`${areasApiUrl}${id}`, {
                 method: 'DELETE',
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                },
+                headers: { 'X-CSRFToken': csrfToken }
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || `Erro do servidor (${response.status}): ${JSON.stringify(errorData)}`);
-            }
-
-            showFeedback(tableFeedback, 'Área de pesquisa removida com sucesso!', 'success');
+            if (!response.ok) throw new Error('Erro ao remover.');
+            showFeedback(tableFeedback, 'Removido com sucesso!', 'success');
             fetchAreas();
-            console.log('[Remover] Área de pesquisa removida com sucesso.');
         } catch (error) {
-            console.error('[Remover Erro] Erro ao remover área de pesquisa:', error);
-            showFeedback(tableFeedback, `Erro ao remover área de pesquisa: ${error.message}`, 'danger');
+            showFeedback(tableFeedback, `Erro: ${error.message}`, 'danger');
         }
     }
 
-    // --- Inicialização ---
-    // NOVO: Carrega e popula os tópicos antes de carregar as áreas (ou em paralelo)
-    fetchAndPopulateTopicos().then(() => {
-        fetchAreas(); // Só carrega as áreas depois que os tópicos estiverem carregados
-    });
-    console.log('[Script Áreas de Pesquisa] Script finalizado.');
+    fetchAndPopulateTopicos().then(fetchAreas);
+})();
 </script>
-
 {% endblock content %}
