@@ -134,4 +134,4 @@ Este projeto é de uso acadêmico e segue a licença [MIT](LICENSE).
 
 ## 🙋‍♀️ Desenvolvido por
 
-Prof. Rosiery Maia e colaboradores da disciplina *Desenvolvimento para Web*.
+Boris Oliveira e colaboradores da disciplina *Desenvolvimento para Web*.
