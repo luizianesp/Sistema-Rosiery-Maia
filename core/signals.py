@@ -2,6 +2,7 @@ from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 import random
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 # Importe todos os seus modelos do app 'core'
 from .models import (
@@ -388,14 +389,14 @@ def populate_initial_data(sender, **kwargs):
 
         # 5. Popula MensagemContato
         for data in mensagens_data:
-            sent_time = datetime.now() - timedelta(days=random.randint(1, 60), hours=random.randint(1, 23))
+            sent_time = timezone.now() - timedelta(days=random.randint(1, 60), hours=random.randint(1, 23))
             MensagemContato.objects.create(
                 nome=data["nome"],
                 email=data["email"],
                 assunto=data["assunto"],
                 mensagem=data["mensagem"],
                 noticias=data["noticias"],
-                enviada_em=sent_time  # Define a data e hora de envio
+                enviada_em=sent_time  # Agora é uma datetime "aware"
             )
         print(f"-> Criadas {len(mensagens_data)} Mensagens de Contato.")
 
