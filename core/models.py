@@ -87,7 +87,7 @@ class MensagemContato(models.Model):
     assunto = models.CharField(max_length=100)
     mensagem = models.TextField()
     noticias = models.BooleanField(default=False)
-    enviada_em = models.DateTimeField(auto_now_add=True, default=timezone.now)
+    enviada_em = models.DateTimeField(default=timezone.now)
 
 
     def __str__(self):

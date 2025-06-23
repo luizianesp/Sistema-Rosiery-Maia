@@ -26,8 +26,8 @@ git checkout entrega3
 **Windows:**
 
 ```bash
-python -m venv venv
-venv\Scripts\activate
+py.exe -m venv venv
+.\venv\Scripts\activate
 ```
 
 **Linux/macOS:**
