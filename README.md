@@ -16,9 +16,9 @@ Este é um sistema web desenvolvido com Django como parte do trabalho final da d
 ### 1. Clone o repositório
 
 ```bash
-git clone -b entrega2 https://github.com/luizianesp/Sistema-Rosiery-Maia.git
+git clone https://github.com/luizianesp/Sistema-Rosiery-Maia.git
 cd Sistema-Rosiery-Maia
-git checkout entrega2
+git checkout entrega3
 ```
 
 ### 2. Crie e ative um ambiente virtual
@@ -48,6 +48,8 @@ pip install -r requirements.txt
 O projeto utiliza o banco de dados padrão do Django (SQLite) por padrão. Não é necessário configurar variáveis de ambiente para isso.
 
 ### 5. Aplique as migrações
+
+Ao aplicar as migrações algumas tabelas serão preenchidas através de um script do arquivo signals.py
 
 ```bash
 python manage.py makemigrations
@@ -107,7 +109,8 @@ python manage.py test
 │   ├── models.py                  # Definição dos modelos de banco de dados
 │   ├── urls.py                    # URLs das views tradicionais do Django (frontend)
 │   └── views.py                   # Views tradicionais do Django (frontend e dashboard admin)
-├── your_project_name/             # Diretório raiz do seu projeto Django
+|   |__signals.py                  # rotina d epopular o banco de dados
+├── backend/             # Diretório raiz do seu projeto Django
 │   ├── __init__.py
 │   ├── settings.py                # Configurações do projeto
 │   ├── urls.py                    # URLs PRINCIPAIS do projeto (incluindo API Ninja)
@@ -121,8 +124,8 @@ python manage.py test
 ##  Notas
 
 - O projeto não requer arquivo `.env`.
-- A API está implementada com Django Ninja e pode ser acessada via `/api/`.
-- Certifique-se de estar na branch `backend2`.
+- A API está implementada com Django Ninja e pode ser acessada via `/api/docs`.
+- Certifique-se de estar na branch `backend3`.
 
 ---
 
@@ -132,6 +135,6 @@ Este projeto é de uso acadêmico e segue a licença [MIT](LICENSE).
 
 ---
 
-## 🙋‍♀️ Desenvolvido por
+##  Desenvolvido por
 
 Boris Oliveira e colaboradores da disciplina *Desenvolvimento para Web*.
