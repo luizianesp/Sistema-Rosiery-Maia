@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Topicos(models.Model):
     nome = models.CharField(max_length=100)
@@ -86,7 +87,7 @@ class MensagemContato(models.Model):
     assunto = models.CharField(max_length=100)
     mensagem = models.TextField()
     noticias = models.BooleanField(default=False)
-    enviada_em = models.DateTimeField(auto_now_add=True)
+    enviada_em = models.DateTimeField(auto_now_add=True, default=timezone.now)
 
 
     def __str__(self):
